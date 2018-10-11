@@ -20,9 +20,13 @@ When recieving the test_send curl request, the hard-coded outputs are passed to 
 provides DGB Key services. contains two functions:
     
    - broadcast_tx(): first calls build_TxInputs() from **build-tx-inputs.js** to generate **transaction inputs**. 
-                     build_TxInputs() makes a request to our remote node interface calling endpoint /get_utxo. 
-                     the result is then parsed into the format required by digibyte-lib as **inputs**
-                     once fetched and formatted __inputs__ are resolved .then(sign_tx()) is called.
+   
+        build_TxInputs() makes a request to our remote node interface calling endpoint /get_utxo. 
+                    
+        the result is then parsed into the format required by digibyte-lib as **inputs**
+        
+        once fetched and formatted __inputs__ are resolved .then(sign_tx()) is called.
+        
    - sign_tx(inputs, outputs, fee, change, pk): signs transactions using inputs and outputs fetched via requests. Fee change and pk are hardcoded global/env variables. 
     
 No requests are made within sign_tx() in order to isolate the module that performs operations using the pk from modules.
