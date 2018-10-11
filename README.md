@@ -20,6 +20,7 @@ When recieving the test_send curl request, the hard-coded outputs are passed to 
 provides DGB Key services. contains two functions:
     
    - **__broadcast_tx(ouputs)__**: 
+   
         calls build_TxInputs(addresses) from **build-tx-inputs.js** to generate **transaction inputs**. 
         
       
