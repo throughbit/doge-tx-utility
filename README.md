@@ -47,7 +47,7 @@ connects to a remote node and provides a raw tx-hex to the sendrawtransaction fu
 
 resolves a __txid__ upon success and passes it back to broadcast_tx from build-tx-complete.
 
-### upon receipt of a __txid__ broadcast_tx() will resolve back to the TxRequestListener Server at L_PORT which can then respond back to  the client with a __txid__ of the successful transaction.
+  upon receipt of a __txid__ broadcast_tx() will resolve back to the TxRequestListener Server at L_PORT which can then respond back to the client with a __txid__ of the *successful* transaction.
 
 ### errors.js
 
