@@ -20,7 +20,7 @@ When recieving the test_send curl request, the hard-coded outputs are passed to 
 provides DGB Key services. contains two functions:
     
    - **__broadcast_tx(ouputs)__**: 
-        first calls build_TxInputs(addresses) from **build-tx-inputs.js** to generate **transaction inputs**. 
+        calls build_TxInputs(addresses) from **build-tx-inputs.js** to generate **transaction inputs**. 
         *addresses here are available utxo address for the given key, which must be maintained separately.
    
         build_TxInputs() makes a request to our remote node interface calling endpoint /get_utxo. 
