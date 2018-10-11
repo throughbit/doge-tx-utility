@@ -36,11 +36,11 @@ provides DGB Key services. contains two functions:
    
         signs transactions using inputs and outputs fetched via requests. Fee change and pk are hardcoded global/env variables. 
     
-No requests are made within sign_tx() in order to isolate the module that performs operations using the pk from modules.
+*No requests are made within sign_tx() in order to isolate the module that performs operations using the pk from modules.
 This removes concerns about dodgy async behaviour affecting any critical pk related operations. 
-More checks required within sign_tx() to ensure inputs and outputs are correctly formatted and verified before signing. 
-
-After sign_tx() resolves a __tx_hex__, control flows back to broadcast_tx which .then() passes the hex to broadcast_to_node() from Broadcaster.js.
+More checks required within sign_tx() to ensure inputs and outputs are correctly formatted and verified before signing.* 
+        
+-> After sign_tx() resolves a __tx_hex__, control flows back to broadcast_tx which .then() passes the hex to broadcast_to_node() from Broadcaster.js.
 
 ## **Broadcaster.js** 
 connects to a remote node and provides a raw tx-hex to the sendrawtransaction function. 
