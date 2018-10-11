@@ -21,8 +21,9 @@ provides DGB Key services. contains two functions:
     
    - **__broadcast_tx(ouputs)__**: 
         calls build_TxInputs(addresses) from **build-tx-inputs.js** to generate **transaction inputs**. 
-        *addresses here are available utxo address for the given key* 
-        - must provide a more dynamic method of storing these addresses, to allow easy addition of addresses without having to change the code.
+        
+      
+        -   *addresses here are available utxo address for the given key* . must provide a more dynamic method of storing these addresses, to allow easy addition of addresses without having to change the code.
    
         build_TxInputs() makes a request to our remote node interface calling endpoint /get_utxo. 
                     
