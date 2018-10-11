@@ -19,7 +19,7 @@ When recieving the test_send curl request, the hard-coded outputs are passed to 
 ## **build-tx-complete.js** 
 provides DGB Key services. contains two functions:
     
-   - broadcast_tx(ouputs): 
+   - **__broadcast_tx(ouputs)__**: 
         first calls build_TxInputs(addresses) from **build-tx-inputs.js** to generate **transaction inputs**. 
         *addresses here are available utxo address for the given key, which must be maintained separately.
    
@@ -29,7 +29,7 @@ provides DGB Key services. contains two functions:
         
         once fetched and formatted __inputs__ are resolved .then(sign_tx()) is called.
         
-   - sign_tx(inputs, outputs, fee, change, pk): 
+   - __**sign_tx(inputs, outputs, fee, change, pk)**__: 
    
         signs transactions using inputs and outputs fetched via requests. Fee change and pk are hardcoded global/env variables. 
     
