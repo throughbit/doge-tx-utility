@@ -1,11 +1,11 @@
 # DGBTxUtility
 Digibyte utitlity for signing and broadcasting transactions to an external node. 
 
-## Test Control Flow:
+### Test Control Flow:
 
 **curl -X POST "http://localhost:$L_PORT/test_send"**
 
-### **TxRequestListener.js** 
+## **TxRequestListener.js** 
 listens for requests from a  client to create a transaction. 
 
 In this test case - the client is the system making the above curl request. 
@@ -13,7 +13,7 @@ In this test case - the client is the system making the above curl request.
 For production, the request will require passing **transaction outputs** i.e. (to_address:amount) which is parsed by **build-tx-outputs.js**. This is currently hard coded as a variable "__outputs__" for testing therefore build-tx-outputs.js is not being used currently.
 When recieving the test_send curl request, the hard-coded outputs are passed to broadcast_tx from build-tx-complete.js. 
 
-### **build-tx-complete.js** 
+## **build-tx-complete.js** 
 provides DGB Key services. contains two functions:
     
    - broadcast_tx(): first calls build_TxInputs() from **build-tx-inputs.js** to generate **transaction inputs**. 
@@ -28,18 +28,41 @@ More checks required within sign_tx() to ensure inputs and outputs are correctly
 
 After sign_tx() resolves a __tx_hex__, control flows back to broadcast_tx which .then() passes the hex to broadcast_to_node() from Broadcaster.js.
 
-### **Broadcaster.js** 
+## **Broadcaster.js** 
 connects to a remote node and provides a raw tx-hex to the sendrawtransaction function. 
 
 resolves a __txid__ upon success and passes it back to broadcast_tx from build-tx-complete.
 
 upon receipt of a __txid__ broadcast_tx() will resolve back to the TxRequestListener Server at L_PORT which can then respond back to  the client with a __txid__ of the successful transaction.
 
+### errors.js
+
+**__Currently not being used__**
+
+errors defines a format for passing responses. All responses follow the format: 
+
+**{status:" ", message:" "}**
+
+status 0 = Fail / False
+
+status 1 = Success / True
+
+This strays away from the traditional C-standard since the boolean-int equivalent in JS is 0 = false and 1 = true. 
+This allows easy checks via if(status){}
+
+Responses are created by calling:
+
+- errorFunc("fail","message") 
+
+- errorFunc("success","message")
+
+eg. **{status: 0, message: "Successfully saved."}**
 ### Notes:
 - Transactions must only be made with a time interval of 6 blocks since UTxO's are hard-coded to only be spendable after 6 confirmations. This equates to ~1.5 minutes. This can be changed by adjusting the minconf value in the express endpoint for listunspent in the NodeServer.js from BTCServices.
+- wait.js is not being used. 
 
 ### UPGRADES:
 - Accept tx_ouputs from client.
 - Check if inputs and outputs are in the correct format at sign_tx()
-- Error handling
+- Efficient error handling using errors.js
 
