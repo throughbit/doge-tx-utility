@@ -18,7 +18,7 @@ const digiurl = `http://localhost:${NI_PORT}/broadcastx`;
 function broadcast_to_node (hex){
  return new Promise ((resolve,reject) => {
   try{
-   console.log("ENTERED", hex);
+   //console.log("HEX:", hex);
    let options = {
       headers:{ "content-type": "application/JSON" },
       url: digiurl,
@@ -28,14 +28,15 @@ function broadcast_to_node (hex){
    }
    request(options,(error, response, body)=>{
     if(error){
-     console.log(error);
+     console.log("Rejecting: Error from request made from broadcast_to_node. \n", error);
      reject (error);
     }
-    console.log("FINAL BOSY",body.result);
+    console.log("Resolving: Got  body from request made from broadcast_to_node. \n",body);
     resolve (body.result);
    });
   }
   catch(e){
+   console.log("Rejecting: Error from broadcast_to_node(hex)\n",e);
    reject(e);
   }
  });
