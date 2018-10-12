@@ -27,24 +27,25 @@ return new Promise((resolve,reject)=>{
      body:{"addresses":addresses},
      json: true
   }
-  console.log(options);
-  console.log("Here to build Tx inputs");
+  console.log("Options passed to get_utxo request: ", options);
   request.post(options, (error, response, body)=>{
    if(error){
-    console.log("ERROR:",error);
+    console.log("Rejecting: error from request to get_utxo: ",error);
     reject (error);
    }
-   console.log("LEBODYYY",body);
+   console.log("Request returned body: ",body);
    let utxo_set=body;
 
    utxo_format(utxo_set)
    .then((utxo_form)=>{
+    console.log("Resolving: Utxo's have  been formatted: ", utxo_form);
     resolve (utxo_form);
     });
    });
   }
   catch(e){
-   console.log(e);
+   
+   console.log("Rejecting: error caught while trying to get_utxo: ", e);
    reject(e);
   }
  });
@@ -63,6 +64,8 @@ function utxo_format (utxos_response){
  return new Promise((resolve,reject)=>{
   try{
    const utxos = utxos_response.message;
+   //MAP METHOD
+   
    // var uform = utxos.map((val,i,utxos)=>{
    //  return val = {
    //    "txId" : utxos[i].txid,
@@ -73,8 +76,8 @@ function utxo_format (utxos_response){
    //  }
    // });
    // resolve(uform);
-   console.log("UTXOSS",utxos);
-   console.log(utxos.length);
+   
+   //RECURSION METHOD
    var uform = new Array();
    var collect_utxoform = function(i){
     if(i < utxos.length){
@@ -89,13 +92,14 @@ function utxo_format (utxos_response){
     collect_utxoform(i+1);
     }
     if(i>=utxos.length){
-     console.log("UFORM:",uform)
+     console.log("Resolving: Recursion ended. UtXo's are formatted. \n",uform)
      resolve(uform);
     }
    }
    collect_utxoform(0);
   }
   catch(e){
+   console.log("Rejecting: Caught an error while trying to format UTxO's: ", e);
    reject(e);
   }
  });
