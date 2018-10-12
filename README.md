@@ -71,6 +71,12 @@ Responses are created by calling:
 - errorFunc("success","message")
 
 eg. **{status: 0, message: "Successfully saved."}**
+
+__Make sure to use the errors response format only at the top of the control flow. General errors caught in the middle of program flow should be passed in their raw format. If the formatted errors are used throughout the flow, responses will end up getting clustered as objects within objects which would require extended object reference notation for example: __
+
+**let response = res.message.message.message;**
+
+
 ### Notes:
 - Transactions must only be made with a time interval of 6 blocks since UTxO's are hard-coded to only be spendable after 6 confirmations. This equates to ~1.5 minutes. This can be changed by adjusting the minconf value in the express endpoint for listunspent in the NodeServer.js from BTCServices.
 - wait.js is not being used. 
