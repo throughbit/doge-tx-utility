@@ -12,27 +12,25 @@ const digibyte = require('digibyte');
 const utxo = require('./build-tx-inputs');
 const txS = require('./build-tx-outputs');
 const broadcaster = require('./Broadcaster');
-const errorSet = require('./errors');
 const holdup = require('./wait');
 //-o_o===/modules================================================|
 //Obfuscate your pk even further than an env variable.
 //However, since this module will be isolated form the internet, env should suffice
 const WIF = process.env.WIF;
 const imported = digibyte.PrivateKey.fromWIF(WIF).toString();
-console.log(imported);
 const changeAddress='DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW';
 const fee=2000;
 //-o_o===SignTx==================================================|
 function sign_tx (inputs,outputs,fee,change,pk){
  return new Promise((resolve,reject)=>{
   try{
-   console.log(inputs,outputs,fee,change,pk);
+   //console.log(inputs,outputs,fee,change);
    var transaction = new digibyte.Transaction();
    transaction.from(inputs);
    let tx_to = function(i){
     if(i < outputs.length){
      transaction.to(outputs[i].address,outputs[i].amount);
-     console.log("WETRYING:" , i);
+    // console.log("TxOutput: " , i);
      //holdup.wait(outputs.length * 100);
      tx_to(i+1);
     }
@@ -40,13 +38,13 @@ function sign_tx (inputs,outputs,fee,change,pk){
      transaction.fee(fee)
      .change(change)
      .sign(pk);
-     resolve(transaction);
+     resolve (transaction);
     }
    }
    tx_to(0);
   }
   catch(e){
-  //console.log({fail_response,e});
+   console.log("Rejecting: Caught error at sign_tx()",e});
    reject (e);
   }
  });
@@ -57,25 +55,26 @@ function broadcast_tx(outputs){
   try{
    const addresses=["DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW"];
    //read addresses from a file
-   console.log("OUTPUTS",outputs);
+   console.log("OUTPUTS: \n",outputs);
    utxo.build_TxInputs(addresses)
     .then(inputs=>sign_tx(inputs,outputs,fee,changeAddress,imported)
      .then((hex)=>{
-      console.log(hex)
+      //console.log("Transaction Signed: ",hex);
      //colliding function names. the broadcast_tx below is being exported from broadcast ;)
       broadcaster.broadcast_to_node(hex.toString())
       .then((response)=>{
-       console.log("MORE RES:",response);
+       console.log("Resolving: response from broadcast_to_node:\n",response);
        resolve(response);
       })
      })
     )//closes first utxo.build_TxInputs(addresses).then(...
     .catch((e)=>{
-     console.log(e);
+     console.log("Rejecting: Error in broadcast_tx()",e);
      reject(e);
     })
    }
    catch(e){
+    console.log("Rejecting: Error in broadcast_tx()",e);
     reject (e);
    }
  });
