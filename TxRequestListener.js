@@ -24,19 +24,21 @@ app.use(bodyParser.urlencoded({extended:true}));
 //-o_o===server-===================================================|
 app.post('/test_send',(req,res)=>{
  try{
-  console.log("IN");
+  //console.log("IN");
+  //one apprach is to take outputs as part of req.body
   let outputs = [{
    "address":"D8bTT8BK2gnzCVP3BYsCqiJPtkGVRxomVe",
    "amount": parseInt(1*1000000)
   }];
-  console.log(outputs);
   tx_build.broadcast_tx(outputs)
   .then((result)=>{
-   console.log("RESULT",result);
-   res.send(resunanolt);
+   let response = errorSet.errorFunc("success: ", result);
+   console.log(`Response: ${response}`);
+   res.send(response);
   })
   .catch(err=>{
-   console.log(err);
+   let response = errorSet.errorFunc("fail: ", e);
+   console.log(`Response:${response}`);
    res.send(err);
   });
  }
