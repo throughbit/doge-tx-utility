@@ -48,8 +48,8 @@ app.post('/test_send',(req,res)=>{
    if(!err.status){
     console.log("At  TX REQUEST LSITENER: ", err.message);
     console.log(err);
-    let response = errorSet.errorFunc("fail: ", JSON.stringify(err.message));
-    console.log(`Fail Response 1:${response}`);
+    let response = errorSet.errorFunc("fail", err.message);
+    console.log(`Fail Response 1:` ,response);
     res.send(response);
    }
    else{
