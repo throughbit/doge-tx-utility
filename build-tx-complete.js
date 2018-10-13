@@ -106,7 +106,7 @@ function broadcast_tx(outputs){
    utxo.build_TxInputs(addresses)
     .then((inputs)=>{
     if(inputs.status){
-     sign_tx(inputs,outputs,fee,changeAddress,imported)
+     sign_tx(inputs.message_array,outputs,fee,changeAddress,imported)
      .then((hex)=>{
       if(hex.status){ 
        broadcast_to_node(hex.message.toString())
