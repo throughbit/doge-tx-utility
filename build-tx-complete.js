@@ -62,8 +62,8 @@ function sign_tx (inputs,outputs,fee,change,pk){
    tx_to(0);
   }
   catch(e){
-   console.log("Rejecting: Caught error at sign_tx()",e);
-   
+   let errorDetail=`Rejecting: Caught error at sign_tx() \nErrorDetail: ${e}`;
+   let response = errorSet.errorFunc("fail", errorDetail);
    let log_data={
     "time":Date.getTime(),
     "status": "fail",
@@ -79,7 +79,8 @@ function sign_tx (inputs,outputs,fee,change,pk){
     else console.log(`Notification logged @ ${log_data.time}. Check ${LPATH}.`);
    });
    
-   reject (e);
+   console.log(response);
+   reject (response);
   }
  });
 }
@@ -91,26 +92,48 @@ function broadcast_tx(outputs){
    //read addresses from a file
    console.log("OUTPUTS: \n",outputs);
    utxo.build_TxInputs(addresses)
-    .then(inputs=>sign_tx(inputs,outputs,fee,changeAddress,imported)
+    .then((inputs)=>{
+    if(inputs.status){
+     sign_tx(inputs,outputs,fee,changeAddress,imported)
      .then((hex)=>{
-      //console.log("Transaction Signed: ",hex);
-     //colliding function names. the broadcast_tx below is being exported from broadcast ;)
-      broadcaster.broadcast_to_node(hex.toString())
-      .then((response)=>{
-       console.log("Resolving: response from broadcast_to_node:\n",response);
-       resolve(response);
-      })
+      if(hex.status){ 
+       broadcast_to_node(hex.message.toString())
+       .then((response)=>{
+        if(response.status){
+         console.log("Resolving: response from broadcast_to_node:\n",response.message);
+         let resp = errorSet.errorFunc("success", response.message);
+         resolve(resp);
+        }
+        else if(!response.status){
+         console.log("Rejecting: response from broadcast_to_node: \n", response.message);
+         let resp = errorSet.errorFunc("success", response.message);
+         reject(resp);
+        }
+       })
+      else if(!hex.status){
+       let resp = errorSet.errorFunc("fail", hex.message);
+       console.log("Rejecting: Error in broadcast_tx() from Hex status promised by sign_tx()\n", hex.message);
+       reject(resp);
+      }
      })
-    )//closes first utxo.build_TxInputs(addresses).then(...
+    else if(!inputs.status){
+     let resp = errorSet.errorFunc("fail", inputs.message);
+     console.log("Rejecting: Error in broadcast_tx() from Inputs status promised by utxo.get_Inputs()\n", inputs.message);
+     reject(resp);
+    }
+   })//closes first utxo.build_TxInputs(addresses).then()...
     .catch((e)=>{
-     console.log("Rejecting: Error in broadcast_tx()",e);
-     reject(e);
-    })
+     let resp = errorSet.errorFunc("fail", e);
+     console.log("Rejecting: Caught error in broadcast_tx()", resp);
+     reject(resp);
+    });
    }
    catch(e){
-    console.log("Rejecting: Error in broadcast_tx()",e);
-    reject (e);
-   }
+    let resp = errorSet.errorFunc("fail", e);
+    console.log("Rejecting: Caught error in broadcast_tx()\nFinal Catch: We should not have got here..\n", resp);
+    reject(resp);
+   });
+  }
  });
 }
 //-o_o===BroadcastTx=============================================|
@@ -127,16 +150,19 @@ function broadcast_to_node (hex){
    }
    request(options,(error, response, body)=>{
     if(error){
+     let resp = errorSet.errorFunc("fail", error);
      console.log("Rejecting: Error from request made from broadcast_to_node. \n", error);
-     reject (error);
+     reject (resp);
     }
     console.log("Resolving: Got  body from request made from broadcast_to_node. \n",body);
-    resolve (body.result);
+    let resp = errorSet.errorFunc("sucess", body.result);
+    resolve (resp);
    });
   }
   catch(e){
+   let resp = errorSet.errorFunc("fail", e);
    console.log("Rejecting: Error from broadcast_to_node(hex)\n",e);
-   reject(e);
+   reject(resp);
   }
  });
 }
