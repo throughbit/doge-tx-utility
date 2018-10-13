@@ -29,20 +29,25 @@ function sign_tx (inputs,outputs,fee,change,pk){
  return new Promise((resolve,reject)=>{
   try{
    //console.log(inputs,outputs,fee,change);
-   var transaction = new digibyte.Transaction();
+   var transaction = new digibyte.Transaction().fee(fee);
+   
    transaction.from(inputs);
+    
    let tx_to = function(i){
     if(i < outputs.length){
+      
      transaction.to(outputs[i].address,outputs[i].amount);
     // console.log("TxOutput: " , i);
      //holdup.wait(outputs.length * 100);
      tx_to(i+1);
     }
     else if (i >= outputs.length) {
-         console.log("BEFORE HEXX");
-     let hex = transaction.fee(fee)
-     .change(change)
-     .sign(pk)
+     console.log("BEFORE HEXX");
+      
+     transaction.change(change)
+     .sign(pk);
+      
+     let hex = transaction.serialize();
      
      console.log("HEXX", hex);
       
