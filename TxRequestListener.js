@@ -32,14 +32,21 @@ app.post('/test_send',(req,res)=>{
   }];
   tx_build.broadcast_tx(outputs)
   .then((result)=>{
-   let response = errorSet.errorFunc("success: ", result);
-   console.log(`Response: ${response}`);
-   res.send(response);
+   if(result.status){
+    let response = errorSet.errorFunc("success: ", result.message);
+    console.log(`Response: ${response}`);
+    res.send(response);
+   }
+   if(!result.status){
+    let response = errorSet.errorFunc("fail", result.message);
+    console.log(`Response: ${response}`);
+    res.send(response);
+   }
   })
   .catch(err=>{
    let response = errorSet.errorFunc("fail: ", e);
    console.log(`Response:${response}`);
-   res.send(err);
+   res.send(response);
   });
  }
  catch(e){
