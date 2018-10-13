@@ -12,7 +12,7 @@ const digibyte = require('digibyte');
 const utxo = require('./build-tx-inputs');
 const txS = require('./build-tx-outputs');
 var fs = require('fs');
-var errorSet = require('./errors);
+var errorSet = require('./errors');
                          
 //-o_o===/modules================================================|
 //Obfuscate your pk even further than an env variable.
