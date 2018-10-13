@@ -37,7 +37,7 @@ function build_TxInputs(addresses) {
     }
     console.log("BODY FROM UTXO REQUEST: ",body);
     if(body.status){
-     console.log("Request to/get_utxo returned body: ",body.status);
+     console.log("Request to/get_utxo returned body: ",body.message);
      let utxo_set=body.message;
 
      utxo_format(utxo_set)
