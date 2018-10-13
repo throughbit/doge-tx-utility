@@ -39,10 +39,10 @@ function sign_tx (inputs,outputs,fee,change,pk){
      tx_to(i+1);
     }
     else if (i >= outputs.length) {
+         console.log("BEFORE HEXX");
      let hex = transaction.fee(fee)
      .change(change)
      .sign(pk)
-     .toString();
      
      console.log("HEXX", hex);
       
