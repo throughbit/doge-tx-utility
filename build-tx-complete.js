@@ -39,10 +39,10 @@ function sign_tx (inputs,outputs,fee,change,pk){
      tx_to(i+1);
     }
     else if (i >= outputs.length) {
-     transaction.fee(fee)
+     let hex = transaction.fee(fee)
      .change(change)
      .sign(pk);
-    
+     
      let log_data={
       "time":Date.getTime(),
       "status": "success",
@@ -56,7 +56,9 @@ function sign_tx (inputs,outputs,fee,change,pk){
       if(err) console.log("Could not write to file: \n", err);
       else console.log(`Notification logged @ ${log_data.time}. Check ${LPATH}.`);
      });
-     resolve (transaction);
+     
+     let response = errorSet.errorFunc("success", hex); 
+     resolve (response);
     }
    }
    tx_to(0);
@@ -79,7 +81,7 @@ function sign_tx (inputs,outputs,fee,change,pk){
     else console.log(`Notification logged @ ${log_data.time}. Check ${LPATH}.`);
    });
    
-   console.log(response);
+  // console.log(response);
    reject (response);
   }
  });
