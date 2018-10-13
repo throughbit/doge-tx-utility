@@ -9,12 +9,10 @@ Broadcasts to a remote node - preferably over a local network to isolate keys fr
 'use strict';
 //-o_o===modules=================================================|
 const digibyte = require('digibyte');
-const utxo = require('./build-tx-inputs');
-const txS = require('./build-tx-outputs');
-var fs = require('fs');
-var errorSet = require('./errors.js');
-const request = require('request');      
+const request = require('request');  
+
 const loggit = require('./logs.js');
+var errorSet = require('./errors.js');
 //-o_o===/modules================================================|
 //Obfuscate your pk even further than an env variable.
 //However, since this module will be isolated form the internet, env should suffice
@@ -56,6 +54,7 @@ function sign_tx (inputs,outputs,fee,change,pk){
       "hex":hex;
      }
      loggit.write_log(true,log_data);
+     //think about how to use this log incase broadcast fails
      
      let response = errorSet.errorFunc("success", hex); 
      //console.log("POST SIGN: ",response);
@@ -74,6 +73,9 @@ function sign_tx (inputs,outputs,fee,change,pk){
      };
    loggit.write_log(false,log_data);
    reject (response);
+  //think about a better strategy to deal with an unsuccessful sign. 
+  //possibly call a waiter function that retries after a certain period, based on the error type.
+  //Definately notify slack.
   }
  });
 }
@@ -101,13 +103,15 @@ function broadcast_tx(outputs){
          console.log("Rejecting: response from broadcast_to_node: \n", response.message);
          let resp = errorSet.errorFunc("success", response.message);
          reject(resp);
+         //consider:- holdup.wait(10000); broadcast_to_node(hex.message.toString());
         }
        });//broadcast_to_node().then();
       }//clost if hex.status 
       else if(!hex.status){
        let resp = errorSet.errorFunc("fail", hex.message);
-       console.log("Rejecting: Error in broadcast_tx() from Hex status promised by sign_tx()\n", hex.message);
+       console.log("Rejecting: Error in broadcast_tx() thrown from sign_tx()\n", hex.message);
        reject(resp);
+       //consider:- holdup.wait(10000); sign_tx(inputs.message_array,outputs,fee,changeAddress,imported);
       }
      });//sign_tx().then();
     }//close if inputs.status 
@@ -115,6 +119,7 @@ function broadcast_tx(outputs){
      let resp = errorSet.errorFunc("fail", inputs.message);
      console.log("Rejecting: Error in broadcast_tx() from Inputs status promised by utxo.get_Inputs()\n", inputs.message);
      reject(resp);
+     
     }
    })//closes first utxo.build_TxInputs(addresses).then()...
     .catch((err)=>{
@@ -136,6 +141,7 @@ function broadcast_tx(outputs){
     let resp = errorSet.errorFunc("fail", e);
     console.log("Rejecting: Caught error in broadcast_tx()\nFinal Catch: We should not have got here..\n", resp);
     reject(resp);
+    //consider:- holdup.wait(10000); broadcast_tx(outputs);
    }
  });//close promise resolve
 }
@@ -156,6 +162,7 @@ function broadcast_to_node (hex){
      let resp = errorSet.errorFunc("fail", error);
      console.log("Rejecting: Error from request made from broadcast_to_node. \n", error);
      reject (resp);
+     //retry?
     }
     console.log("BODY FROM broadcast_to_node request" ,body);
     if(body.status){
@@ -167,6 +174,7 @@ function broadcast_to_node (hex){
      let resp = errorSet.errorFunc("fail", body.message);
      console.log("Rejecting: Got failed body from request made from broadcast_to_node. \n", resp);
      reject (resp);
+     //retry?
     }
    });
   }
@@ -174,6 +182,7 @@ function broadcast_to_node (hex){
    let resp = errorSet.errorFunc("fail", e);
    console.log("Rejecting: Error from broadcast_to_node(hex)\n",resp);
    reject(resp);
+   //retry
   }
  });
 }
