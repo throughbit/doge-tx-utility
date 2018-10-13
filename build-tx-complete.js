@@ -11,8 +11,6 @@ Broadcasts to a remote node - preferably over a local network to isolate keys fr
 const digibyte = require('digibyte');
 const utxo = require('./build-tx-inputs');
 const txS = require('./build-tx-outputs');
-const broadcaster = require('./Broadcaster');
-const holdup = require('./wait');
 var fs = require('fs');
 //-o_o===/modules================================================|
 //Obfuscate your pk even further than an env variable.
