@@ -48,7 +48,7 @@ function sign_tx (inputs,outputs,fee,change,pk){
       "status": "success",
       "message": "Transactions have been signed.", 
       "transaction_outputs": outputs,
-      "transaction_inputs": inputs
+      "transaction_inputs": inputs,
       "hex":transaction
      }
      let log_separator = "#--------------------------------------------------------------------------------------------------------------- ";
