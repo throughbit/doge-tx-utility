@@ -51,18 +51,9 @@ resolves a __txid__ upon success and passes it back to broadcast_tx from build-t
 
 ### errors.js
 
-**__Currently not being used__**
-
 errors defines a format for passing responses. All responses follow the format: 
 
-**{status:" ", message:" "}**
-
-status 0 = Fail / False
-
-status 1 = Success / True
-
-This strays away from the traditional C-standard since the boolean-int equivalent in JS is 0 = false and 1 = true. 
-This allows easy checks via if(status){}
+**{status:true/false, message:" "}**
 
 Responses are created by calling:
 
@@ -70,9 +61,13 @@ Responses are created by calling:
 
 - errorFunc("success","message")
 
-eg. **{status: 0, message: "Successfully saved."}**
+eg. 
+**errorSet.errorFunc("success", "Successfully saved);**
+**{status: true, message: "Successfully saved."}**
 
-__Make sure to use the errors response format only at the top of the control flow. General errors caught in the middle of program flow should be passed in their raw format. If the formatted errors are used throughout the flow, responses will end up getting clustered as objects within objects which would require extended object reference notation for example: __
+__Make sure that responses are checked at every stage of control flow. By chekcing response.status we know if our result must be resolved or rejected and/or whether they should be passed down stream or be thrown up the control flow.__
+
+It is important to always check the status and only pass response.message or else you could end up with nested responses which could lead to situations where this might be required: 
 
 **let response = res.message.message.message;**
 
