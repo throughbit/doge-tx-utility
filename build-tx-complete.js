@@ -126,8 +126,8 @@ function broadcast_tx(outputs){
      reject(resp);
     }
    })//closes first utxo.build_TxInputs(addresses).then()...
-    .catch((e)=>{
-     let resp = errorSet.errorFunc("fail", e);
+    .catch((err)=>{
+     let resp = errorSet.errorFunc("fail", err);
      console.log("Rejecting: Caught error in broadcast_tx()", resp);
      reject(resp);
     });//closes utxo.build_TxInputs(addresses).then().catch();
