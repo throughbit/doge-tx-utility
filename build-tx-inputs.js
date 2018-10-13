@@ -9,7 +9,7 @@ Requests remote node for unspent outputs of given addresses, which are used as i
 //-o_o===modules=================================================|
 var request = require('request');
 var bodyParser = require('body-parser');
-var errorSet = require('./errors');
+var errorSet = require('./errors.js');
 //-o_O===init===================================================~|
 //NI_PORT: Port running node interface
 var NI_PORT = process.env.NI_PORT;
