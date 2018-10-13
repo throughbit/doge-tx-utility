@@ -176,6 +176,7 @@ function broadcast_to_node (hex){
      console.log("Rejecting: Error from request made from broadcast_to_node. \n", error);
      reject (resp);
     }
+    console.log("BODY FROM broadcast_to_node request" ,body);
     if(body.status){
      console.log("Resolving: Got successful body from request made from broadcast_to_node. \n",body);
      let resp = errorSet.errorFunc("sucess", body.result);
