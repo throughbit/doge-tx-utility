@@ -109,13 +109,15 @@ function broadcast_tx(outputs){
          let resp = errorSet.errorFunc("success", response.message);
          reject(resp);
         }
-       })
+       });//broadcast_to_node().then();
+      }//clost if hex.status 
       else if(!hex.status){
        let resp = errorSet.errorFunc("fail", hex.message);
        console.log("Rejecting: Error in broadcast_tx() from Hex status promised by sign_tx()\n", hex.message);
        reject(resp);
       }
-     })
+     });//sign_tx().then();
+    }//close if inputs.status 
     else if(!inputs.status){
      let resp = errorSet.errorFunc("fail", inputs.message);
      console.log("Rejecting: Error in broadcast_tx() from Inputs status promised by utxo.get_Inputs()\n", inputs.message);
@@ -126,15 +128,15 @@ function broadcast_tx(outputs){
      let resp = errorSet.errorFunc("fail", e);
      console.log("Rejecting: Caught error in broadcast_tx()", resp);
      reject(resp);
-    });
-   }
+    });//closes utxo.build_TxInputs(addresses).then().catch();
+   }//close main try
+   //final catch
    catch(e){
     let resp = errorSet.errorFunc("fail", e);
     console.log("Rejecting: Caught error in broadcast_tx()\nFinal Catch: We should not have got here..\n", resp);
     reject(resp);
-   });
-  }
- });
+   }
+ });//close promise resolve
 }
 //-o_o===BroadcastTx=============================================|
 function broadcast_to_node (hex){
