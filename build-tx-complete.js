@@ -21,7 +21,7 @@ const changeAddress='DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW';
 const fee=2000;
 const digiurl = `http://localhost:${NI_PORT}/broadcastx`;
 const LPATH = process.env.DSIGN_LPATH;
-
+const NI_PORT = process.env.NI_PORT;
 //-o_o===SignTx==================================================|
 function sign_tx (inputs,outputs,fee,change,pk){
  return new Promise((resolve,reject)=>{
