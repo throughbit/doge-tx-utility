@@ -41,7 +41,8 @@ function sign_tx (inputs,outputs,fee,change,pk){
     else if (i >= outputs.length) {
      let hex = transaction.fee(fee)
      .change(change)
-     .sign(pk);
+     .sign(pk)
+     .toString();
      
      let log_data={
       "time":new Date().getTime(),
