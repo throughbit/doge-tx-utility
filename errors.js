@@ -6,44 +6,30 @@ HYFERx Project
 //-o_O============================================================~|
 'use strict';
 
-function errorFunc(type,msg){
+function errorFunc(type,msg,msg_arr){
 
- var fail = {
- "default": "Error",
- "badIn": "Bad inputs. Check formats.",
- "fcatch": "Final catch",
- "badReq": "Bad Request.",
- "auth": "Authorization failure",
- "addr": "Invalid Address",
- "amt": "Invalid Amount",
- "limit": "Send amount over limit.",
- "amt": "Amount below zero.",
- "NaN": "Not a Number.",
- };
- var success = {
- "privkey": "Generated Private Key",
- "pubaddr": "Generated Public Addresses"
- };
  var fail_response = {
  "status": false,
- "message": ""
+ "message": "",
+ "message_array":[]
  };
  var success_response = {
  "status": true,
- "message": ""
+ "message": "",
+ "message_array":[]
  };
 
  if(type==='fail'){
   let response = fail_response;
-   if(fail[msg]===undefined || fail[msg]===null) { response.message = msg; }
-   else { response.message = fail[msg]; }
+  response.message = msg;
+  response.message_array = msg_arr;
   return response;
  }
 
  if(type==='success'){
   let response = success_response;
-   if(success[msg]===undefined || success[msg]===null) { response.message = msg; }
-   else { response.message = success[msg]; }
+  response.message = msg; 
+  response.message_array = msg_arr;
   return response;
  }
 
