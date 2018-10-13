@@ -25,11 +25,11 @@ function errorFunc(type,msg){
  "pubaddr": "Generated Public Addresses"
  };
  var fail_response = {
- "status": "0",
+ "status": false,
  "message": "Operation Failed."
  };
  var success_response = {
- "status": "1",
+ "status": true,
  "message": "Great Success."
  };
 
