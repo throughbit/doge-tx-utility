@@ -178,7 +178,7 @@ function broadcast_to_node (hex){
     }
     console.log("BODY FROM broadcast_to_node request" ,body);
     if(body.status){
-     let resp = errorSet.errorFunc("sucess", body.message);
+     let resp = errorSet.errorFunc("success", body.message);
      console.log("Resolving: Got successful body from request made from broadcast_to_node. \n",resp);
      resolve (resp);
     }
