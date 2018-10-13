@@ -32,6 +32,7 @@ app.post('/test_send',(req,res)=>{
   }];
   tx_build.broadcast_tx(outputs)
   .then((result)=>{
+   console.log(result);
    if(result.status){
     let response = errorSet.errorFunc("success: ", result.message);
     console.log(`Sucess Response: ${response}`);
