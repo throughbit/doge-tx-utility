@@ -79,6 +79,33 @@ function broadcast_tx(outputs){
    }
  });
 }
+//-o_o===BroadcastTx=============================================|
+function broadcast_to_node (hex){
+ return new Promise ((resolve,reject) => {
+  try{
+   //console.log("HEX:", hex);
+   let options = {
+      headers:{ "content-type": "application/JSON" },
+      url: digiurl,
+      method: 'POST',
+      body:{"hex":hex},
+      json: true
+   }
+   request(options,(error, response, body)=>{
+    if(error){
+     console.log("Rejecting: Error from request made from broadcast_to_node. \n", error);
+     reject (error);
+    }
+    console.log("Resolving: Got  body from request made from broadcast_to_node. \n",body);
+    resolve (body.result);
+   });
+  }
+  catch(e){
+   console.log("Rejecting: Error from broadcast_to_node(hex)\n",e);
+   reject(e);
+  }
+ });
+}
 //-o_o===exports==========================================------||
 module.exports={broadcast_tx}
 //-o_o===fin==============================================------||
