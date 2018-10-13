@@ -35,6 +35,7 @@ function build_TxInputs(addresses) {
      console.log("Rejecting: error from request to get_utxo: ",error);
      reject (resp);
     }
+    console.log("BODY FROM UTXO REQUEST: ",body);
     if(body.status){
      console.log("Request returned body: ",body.message);
      let utxo_set=body.message;
@@ -53,7 +54,7 @@ function build_TxInputs(addresses) {
       }
      });
     }
-    if(!body.result.status){
+    if(!body.status){
      let resp = errorSet.errorFunc("fail", body.message);
      console.log("Received error status from request to /get_utxo \n",body.message);
      reject (resp);
