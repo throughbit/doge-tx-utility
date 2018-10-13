@@ -50,8 +50,8 @@ function sign_tx (inputs,outputs,fee,change,pk){
      //console.log("HEXX", hex);
      let log_data = {
       "outputs":outputs,
-      "inputs:inputs,
-      "hex":hex;
+      "inputs":inputs,
+      "hex":hex
      }
      loggit.write_log(true,log_data);
      //think about how to use this log incase broadcast fails
@@ -69,7 +69,7 @@ function sign_tx (inputs,outputs,fee,change,pk){
    // console.log(response);
    let log_data = {
       "outputs":outputs,
-      "inputs:inputs,
+      "inputs":inputs,
      };
    loggit.write_log(false,log_data);
    reject (response);
