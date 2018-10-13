@@ -43,7 +43,7 @@ function build_TxInputs(addresses) {
      utxo_format(utxo_set)
      .then((utxo_form)=>{
       if(utxo_form.status){
-       let resp = errorSet.errorFunc("success", utxo_form.message_array);
+       let resp = errorSet.errorFunc("success","Sending Array", utxo_form.message_array);
        console.log("Resolving: Utxo's have  been formatted: ", resp);
        resolve (resp);
       }
@@ -109,7 +109,7 @@ function utxo_format (utxos){
     collect_utxoform(i+1);
     }
     if(i>=utxos.length){
-     let resp = errorSet.errorFunc("success", "check array", uform);
+     let resp = errorSet.errorFunc("success", "Sending Array", uform);
      console.log("Resolving: Recursion ended. UtXo's are formatted. \n",resp)
      resolve (resp);
     }
