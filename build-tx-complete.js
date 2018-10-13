@@ -13,7 +13,8 @@ const utxo = require('./build-tx-inputs');
 const txS = require('./build-tx-outputs');
 var fs = require('fs');
 var errorSet = require('./errors.js');
-const request = require('request');                         
+const request = require('request');      
+const loggit = require('./logs.js');
 //-o_o===/modules================================================|
 //Obfuscate your pk even further than an env variable.
 //However, since this module will be isolated form the internet, env should suffice
@@ -23,7 +24,7 @@ const changeAddress='DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW';
 const fee=2000;
 const NI_PORT = process.env.NI_PORT;
 const digiurl = `http://localhost:${NI_PORT}/broadcastx`;
-const LPATH = process.env.DSIGN_LPATH;
+
 //-o_o===SignTx==================================================|
 function sign_tx (inputs,outputs,fee,change,pk){
  return new Promise((resolve,reject)=>{
@@ -46,27 +47,18 @@ function sign_tx (inputs,outputs,fee,change,pk){
       
      transaction.change(change)
      .sign(pk);
-      
+  
      let hex = transaction.serialize();
-     
-     console.log("HEXX", hex);
-      
-     let log_data={
-      "time":new Date().getTime(),
-      "status": "success",
-      "message": "Transactions have been signed.", 
-      "transaction_outputs": outputs,
-      "transaction_inputs": inputs,
-      "hex":hex
+     //console.log("HEXX", hex);
+     let log_data = {
+      "outputs":outputs,
+      "inputs:inputs,
+      "hex":hex;
      }
-     let log_separator = "#--------------------------------------------------------------------------------------------------------------- ";
-     
-     fs.appendFile(`${LPATH}`,`${JSON.stringify(log_data,null,1)}\n${log_separator}\n`, function(err){
-      if(err) console.log("Could not write to file: \n", err);
-      else console.log(`Notification logged @ ${log_data.time}. Check ${LPATH}.`);
-     });
+     loggit.write_log(true,log_data);
      
      let response = errorSet.errorFunc("success", hex); 
+     //console.log("POST SIGN: ",response);
      resolve (response);
     }
    }
@@ -75,23 +67,12 @@ function sign_tx (inputs,outputs,fee,change,pk){
   catch(e){
    let errorDetail=`Rejecting: Caught error at sign_tx() \nErrorDetail: ${e}`;
    let response = errorSet.errorFunc("fail", errorDetail);
-   let log_data={
-    "time":new Date().getTime(),
-    "status": "fail",
-    "message":`Error signing transactions.\nError: ${e}`,
-    "transaction_outputs": outputs,
-    "transaction_inputs": inputs
-    //next level: split addresses from amounts.
-    //see if this runs for now
-   }
-   let log_separator = "#--------------------------------------------------------------------------------------------------------------- ";
-
-   fs.appendFile(`${LPATH}`,`${JSON.stringify(log_data,null,1)}\n${log_separator}\n`, function(err){
-    if(err) console.log("Could not write to file: \n", err);
-    else console.log(`Notification logged @ ${log_data.time}. Check ${LPATH}.`);
-   });
-   
-  // console.log(response);
+   // console.log(response);
+   let log_data = {
+      "outputs":outputs,
+      "inputs:inputs,
+     };
+   loggit.write_log(false,log_data);
    reject (response);
   }
  });
