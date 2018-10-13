@@ -98,7 +98,7 @@ function utxo_format (utxos){
    var uform = new Array();
    var collect_utxoform = function(i){
     if(i < utxos.length){
-     console.log("rec round: ", i);
+     //console.log("rec round: ", i);
      uform.push({
        "txId" : utxos[i].txid,
        "outputIndex" : utxos[i].vout,
