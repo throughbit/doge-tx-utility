@@ -162,7 +162,7 @@ function broadcast_tx(outputs){
 function broadcast_to_node (hex){
  return new Promise ((resolve,reject) => {
   try{
-   //console.log("HEX:", hex);
+   console.log("HEX:", hex);
    let options = {
       headers:{ "content-type": "application/JSON" },
       url: digiurl,
