@@ -79,5 +79,4 @@ It is important to always check the status and only pass response.message or els
 ### UPGRADES:
 - Accept tx_ouputs from client.
 - Check if inputs and outputs are in the correct format at sign_tx()
-- Efficient error handling using errors.js
-- Develop a method of storing and maintaning addresses with UTxOs
+- **Efficient error handling using errors.js**
