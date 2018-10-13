@@ -34,6 +34,7 @@ function build_TxInputs(addresses) {
      let resp = errorSet.errorFunc("fail",error,[]);
      console.log("Rejecting: error from request to get_utxo: ",error);
      reject (resp);
+     //retry?
     }
     console.log("BODY FROM UTXO REQUEST: ",body);
     if(body.status){
@@ -51,6 +52,7 @@ function build_TxInputs(addresses) {
        let resp = errorSet.errorFunc("fail",utxo_form.message);
        console.log("Rejecting: Error Formatting Utxo: ",resp);
        resolve (resp);
+       //retry?
       }
      });
     }
@@ -58,6 +60,7 @@ function build_TxInputs(addresses) {
      let resp = errorSet.errorFunc("fail", JSON.stringify(body.message));
      console.log("Received error status from request to /get_utxo \n",resp);
      reject (resp);
+     //retry?
     }
    });//close the request
   }
@@ -65,6 +68,7 @@ function build_TxInputs(addresses) {
    let resp = errorSet.errorFunc("fail", e);
    console.log("Rejecting: error caught while trying to get_utxo: ", e);
    reject(resp);
+   //retry?
   }
  });
 }
