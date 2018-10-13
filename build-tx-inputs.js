@@ -56,7 +56,7 @@ function build_TxInputs(addresses) {
     }
     if(!body.status){
      let resp = errorSet.errorFunc("fail", JSON.stringify(body.message));
-     console.log("Received error status from request to /get_utxo \n",body.message);
+     console.log("Received error status from request to /get_utxo \n",resp);
      reject (resp);
     }
    });//close the request
