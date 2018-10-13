@@ -34,31 +34,31 @@ app.post('/test_send',(req,res)=>{
   .then((result)=>{
    if(result.status){
     let response = errorSet.errorFunc("success: ", result.message);
-    console.log(`Response: ${response}`);
+    console.log(`Sucess Response: ${response}`);
     res.send(response);
    }
    if(!result.status){
     let response = errorSet.errorFunc("fail", result.message);
-    console.log(`Response: ${response}`);
+    console.log(`Fail Response 0: ${response}`);
     res.send(response);
    }
   })
   .catch(err=>{
    if(err.status){
     let response = errorSet.errorFunc("fail: ", err.message);
-    console.log(`Response:${response}`);
+    console.log(`Fail Response 1:${response}`);
     res.send(response);
    }
    else{
     let response = errorSet.errorFunc("fail: ", err);
-    console.log(`Response:${response}`);
+    console.log(`Fail Response 2:${response}`);
     res.send(response);
    }
   });
  }
  catch(e){
    let response = errorSet.errorFunc("fail",e);
-   console.log(response);
+   console.log("Fail Respnse 3: ",response);
    res.send(response);
  }
 });
