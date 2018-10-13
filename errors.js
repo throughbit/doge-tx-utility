@@ -26,11 +26,11 @@ function errorFunc(type,msg){
  };
  var fail_response = {
  "status": false,
- "message": 
+ "message": ""
  };
  var success_response = {
  "status": true,
- "message": 
+ "message": ""
  };
 
  if(type==='fail'){
