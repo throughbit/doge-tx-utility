@@ -154,9 +154,16 @@ function broadcast_to_node (hex){
      console.log("Rejecting: Error from request made from broadcast_to_node. \n", error);
      reject (resp);
     }
-    console.log("Resolving: Got  body from request made from broadcast_to_node. \n",body);
-    let resp = errorSet.errorFunc("sucess", body.result);
-    resolve (resp);
+    if(body.result.status){
+     console.log("Resolving: Got successful body from request made from broadcast_to_node. \n",body);
+     let resp = errorSet.errorFunc("sucess", body.result);
+     resolve (resp);
+    }
+    if(!body.result.status){
+     let resp = errorSet.errorFunc("fail", body.result.message);
+     console.log("Rejecting: Got failed body from request made from broadcast_to_node. \n", body.result.message);
+     reject (resp);
+    }
    });
   }
   catch(e){
