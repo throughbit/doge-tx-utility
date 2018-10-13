@@ -44,6 +44,8 @@ function sign_tx (inputs,outputs,fee,change,pk){
      .sign(pk)
      .toString();
      
+     console.log("HEXX", hex);
+      
      let log_data={
       "time":new Date().getTime(),
       "status": "success",
