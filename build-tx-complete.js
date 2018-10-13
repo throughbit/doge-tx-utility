@@ -48,6 +48,7 @@ function sign_tx (inputs,outputs,fee,change,pk){
       "status": "success",
       "message": "Transactions have been signed.", 
       "transaction_outputs": outputs,
+      "transaction_inputs": inputs
       "hex":transaction
      }
      let log_separator = "#--------------------------------------------------------------------------------------------------------------- ";
@@ -70,7 +71,8 @@ function sign_tx (inputs,outputs,fee,change,pk){
     "time":new Date().getTime(),
     "status": "fail",
     "message":`Error signing transactions.\nError: ${e}`,
-    "transaction_outputs": outputs
+    "transaction_outputs": outputs,
+    "transaction_inputs": inputs
     //next level: split addresses from amounts.
     //see if this runs for now
    }
