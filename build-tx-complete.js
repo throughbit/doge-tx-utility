@@ -13,7 +13,7 @@ const utxo = require('./build-tx-inputs');
 const txS = require('./build-tx-outputs');
 var fs = require('fs');
 var errorSet = require('./errors.js');
-                         
+const request = require('request');                         
 //-o_o===/modules================================================|
 //Obfuscate your pk even further than an env variable.
 //However, since this module will be isolated form the internet, env should suffice
