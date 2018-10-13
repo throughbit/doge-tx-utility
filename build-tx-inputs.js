@@ -9,6 +9,7 @@ Requests remote node for unspent outputs of given addresses, which are used as i
 //-o_o===modules=================================================|
 var request = require('request');
 var bodyParser = require('body-parser');
+var errorSet = require('./errors');
 //-o_O===init===================================================~|
 //NI_PORT: Port running node interface
 var NI_PORT = process.env.NI_PORT;
@@ -18,33 +19,49 @@ const server_url = `http://localhost:${NI_PORT}/get_utxo`;
 //Link all addresses of the given key containing UTxO
 //-o_o===request-utxo============================================|
 function build_TxInputs(addresses) {
-return new Promise((resolve,reject)=>{
- try{
-  let options = {
-     headers:{ "content-type": "application/JSON" },
-     url: server_url,
-     method: 'POST',
-     body:{"addresses":addresses},
-     json: true
-  }
-  console.log("Options passed to get_utxo request: ", options);
-  request.post(options, (error, response, body)=>{
-   if(error){
-    console.log("Rejecting: error from request to get_utxo: ",error);
-    reject (error);
+ return new Promise((resolve,reject)=>{
+  try{
+   let options = {
+      headers:{ "content-type": "application/JSON" },
+      url: server_url,
+      method: 'POST',
+      body:{"addresses":addresses},
+      json: true
    }
-   console.log("Request returned body: ",body);
-   let utxo_set=body;
+   console.log("Options passed to get_utxo request: ", options);
+   request.post(options, (error, response, body)=>{
+    if(error){
+     let resp = errorSet.errorFunc("fail",error);
+     console.log("Rejecting: error from request to get_utxo: ",error);
+     reject (resp);
+    }
+    if(body.result.status){
+     console.log("Request returned body: ",body.result.message);
+     let utxo_set=body.result.message;
 
-   utxo_format(utxo_set)
-   .then((utxo_form)=>{
-    console.log("Resolving: Utxo's have  been formatted: ", utxo_form);
-    resolve (utxo_form);
-    });
-   });
+     utxo_format(utxo_set)
+     .then((utxo_form)=>{
+      if(utxo_form.status){
+       let resp = errorSet.errorFunc("success", utxo_form.message);
+       console.log("Resolving: Utxo's have  been formatted: ", utxo_form.message);
+       resolve (resp);
+      }
+      if(!utxo_form.status){
+       let resp = errorSet.errorFunc("fail",utxo_form.message);
+       console.log("Rejecting: Error Formatting Utxo: ", utxo_form.message);
+       resolve (resp);
+      }
+     });
+    }
+    if(!body.result.status){
+     let resp = errorSet.errorFunc("fail", body.result.message);
+     console.log("Received error status from request to /get_utxo \n",body.result.message);
+     reject (resp);
+    }
+   });//close the request
   }
   catch(e){
-   
+
    console.log("Rejecting: error caught while trying to get_utxo: ", e);
    reject(e);
   }
@@ -63,7 +80,7 @@ return new Promise((resolve,reject)=>{
 function utxo_format (utxos_response){
  return new Promise((resolve,reject)=>{
   try{
-   const utxos = utxos_response.message;
+   const utxos = utxos_response;
    //MAP METHOD
    
    // var uform = utxos.map((val,i,utxos)=>{
@@ -92,15 +109,17 @@ function utxo_format (utxos_response){
     collect_utxoform(i+1);
     }
     if(i>=utxos.length){
+     let resp = errorSet.errorFunc("success", uform);
      console.log("Resolving: Recursion ended. UtXo's are formatted. \n",uform)
-     resolve(uform);
+     resolve (resp);
     }
    }
    collect_utxoform(0);
   }
   catch(e){
+   let resp = errorSet.errorFunc("fail",e);
    console.log("Rejecting: Caught an error while trying to format UTxO's: ", e);
-   reject(e);
+   reject(resp);
   }
  });
 }
