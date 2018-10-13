@@ -36,8 +36,8 @@ function build_TxInputs(addresses) {
      reject (resp);
     }
     if(body.result.status){
-     console.log("Request returned body: ",body.result.message);
-     let utxo_set=body.result.message;
+     console.log("Request returned body: ",body.message);
+     let utxo_set=body.message;
 
      utxo_format(utxo_set)
      .then((utxo_form)=>{
@@ -54,8 +54,8 @@ function build_TxInputs(addresses) {
      });
     }
     if(!body.result.status){
-     let resp = errorSet.errorFunc("fail", body.result.message);
-     console.log("Received error status from request to /get_utxo \n",body.result.message);
+     let resp = errorSet.errorFunc("fail", body.message);
+     console.log("Received error status from request to /get_utxo \n",body.message);
      reject (resp);
     }
    });//close the request
