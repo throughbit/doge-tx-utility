@@ -31,7 +31,7 @@ function build_TxInputs(addresses) {
    console.log("Options passed to get_utxo request: ", options);
    request.post(options, (error, response, body)=>{
     if(error){
-     let resp = errorSet.errorFunc("fail",error);
+     let resp = errorSet.errorFunc("fail",error,[]);
      console.log("Rejecting: error from request to get_utxo: ",error);
      reject (resp);
     }
@@ -43,7 +43,7 @@ function build_TxInputs(addresses) {
      utxo_format(utxo_set)
      .then((utxo_form)=>{
       if(utxo_form.status){
-       let resp = errorSet.errorFunc("success", utxo_form.message);
+       let resp = errorSet.errorFunc("success", utxo_form.message_array);
        console.log("Resolving: Utxo's have  been formatted: ", resp);
        resolve (resp);
       }
@@ -109,8 +109,8 @@ function utxo_format (utxos){
     collect_utxoform(i+1);
     }
     if(i>=utxos.length){
-     let resp = errorSet.errorFunc("success", uform);
-     console.log("Resolving: Recursion ended. UtXo's are formatted. \n",uform)
+     let resp = errorSet.errorFunc("success", "check array", uform);
+     console.log("Resolving: Recursion ended. UtXo's are formatted. \n",resp)
      resolve (resp);
     }
    }
@@ -118,7 +118,7 @@ function utxo_format (utxos){
   }
   catch(e){
    let resp = errorSet.errorFunc("fail",e);
-   console.log("Rejecting: Caught an error while trying to format UTxO's: ", e);
+   console.log("Rejecting: Caught an error while trying to format UTxO's: ", resp);
    reject(resp);
   }
  });
