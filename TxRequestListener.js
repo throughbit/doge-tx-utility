@@ -7,7 +7,7 @@ Genererates a transaction output set and calls broadcast_tx
 //-o_O===<..>===================================================~|
 'use strict';
 //-o_O===modules================================================~|
-var errorSet = require('./errors');
+var errorSet = require('./errors.js');
 var express = require('express');
 var helmet = require('helmet');
 var bodyParser = require('body-parser');
