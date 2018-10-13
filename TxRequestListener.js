@@ -45,7 +45,7 @@ app.post('/test_send',(req,res)=>{
    }
   })
   .catch(err=>{
-   if(err.status){
+   if(!err.status){
     let response = errorSet.errorFunc("fail: ", err.message);
     console.log(`Fail Response 1:${response}`);
     res.send(response);
