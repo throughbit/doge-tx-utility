@@ -77,7 +77,7 @@ logs defines a format for logging history of signed and broadcasted transactions
 
 logs can be easily extended to create a format for logging of other functions.
 
-currently only a log for the sign_tx() function exists. 
+currently only a format for the sign_tx() function exists. 
 
 ### Notes:
 - Transactions must only be made with a time interval of 6 blocks since UTxO's are hard-coded to only be spendable after 6 confirmations. This equates to ~1.5 minutes. This can be changed by adjusting the minconf value in the express endpoint for listunspent in the NodeServer.js from BTCServices.
