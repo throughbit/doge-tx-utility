@@ -44,7 +44,7 @@ function sign_tx (inputs,outputs,fee,change,pk){
      .sign(pk);
      
      let log_data={
-      "time":new Date.getTime(),
+      "time":new Date().getTime(),
       "status": "success",
       "message": "Transactions have been signed.", 
       "transaction_outputs": outputs,
@@ -67,7 +67,7 @@ function sign_tx (inputs,outputs,fee,change,pk){
    let errorDetail=`Rejecting: Caught error at sign_tx() \nErrorDetail: ${e}`;
    let response = errorSet.errorFunc("fail", errorDetail);
    let log_data={
-    "time":new Date.getTime(),
+    "time":new Date().getTime(),
     "status": "fail",
     "message":`Error signing transactions.\nError: ${e}`,
     "transaction_outputs": outputs
