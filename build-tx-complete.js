@@ -129,12 +129,12 @@ function broadcast_tx(outputs){
     .catch((err)=>{
      if(!err.message.status){
       let resp = errorSet.errorFunc("fail", JSON.stringify(err.message.message));
-      console.log("Rejecting: Caught error in broadcast_tx()", resp);
+      console.log("2.Rejecting: Caught error in broadcast_tx()", resp);
       reject(resp);
      }
      else if(!err.status){
       let resp = errorSet.errorFunc("fail",JSON.stringify(err.message));
-      console.log("Rejecting: Caught error in broadcast_tx()", resp);
+      console.log("2.Rejecting: Caught error in broadcast_tx()", resp);
       reject(resp);
      }
      else{
