@@ -6,8 +6,7 @@ HYFERx Project
 //-o_O============================================================~|
 'use strict';
 
-function errorFunc(type,msg,msg_arr){
-
+function errorFunc(type,msg,msg_arr){ 
  var fail_response = {
  "status": false,
  "message": "",
