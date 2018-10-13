@@ -178,20 +178,20 @@ function broadcast_to_node (hex){
     }
     console.log("BODY FROM broadcast_to_node request" ,body);
     if(body.status){
-     console.log("Resolving: Got successful body from request made from broadcast_to_node. \n",body);
-     let resp = errorSet.errorFunc("sucess", body.result);
+     let resp = errorSet.errorFunc("sucess", body.message);
+     console.log("Resolving: Got successful body from request made from broadcast_to_node. \n",resp);
      resolve (resp);
     }
     if(!body.status){
-     let resp = errorSet.errorFunc("fail", body.result.message);
-     console.log("Rejecting: Got failed body from request made from broadcast_to_node. \n", body.result.message);
+     let resp = errorSet.errorFunc("fail", body.message);
+     console.log("Rejecting: Got failed body from request made from broadcast_to_node. \n", resp);
      reject (resp);
     }
    });
   }
   catch(e){
    let resp = errorSet.errorFunc("fail", e);
-   console.log("Rejecting: Error from broadcast_to_node(hex)\n",e);
+   console.log("Rejecting: Error from broadcast_to_node(hex)\n",resp);
    reject(resp);
   }
  });
