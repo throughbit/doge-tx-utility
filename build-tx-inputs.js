@@ -61,9 +61,9 @@ function build_TxInputs(addresses) {
    });//close the request
   }
   catch(e){
-
+   let resp = errorSet.errorFunc("fail", e);
    console.log("Rejecting: error caught while trying to get_utxo: ", e);
-   reject(e);
+   reject(resp);
   }
  });
 }
@@ -77,10 +77,9 @@ function build_TxInputs(addresses) {
     });
   }*/
 //-o_O===format-utxo============================================~|
-function utxo_format (utxos_response){
+function utxo_format (utxos){
  return new Promise((resolve,reject)=>{
   try{
-   const utxos = utxos_response;
    //MAP METHOD
    
    // var uform = utxos.map((val,i,utxos)=>{
