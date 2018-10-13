@@ -44,12 +44,12 @@ function build_TxInputs(addresses) {
      .then((utxo_form)=>{
       if(utxo_form.status){
        let resp = errorSet.errorFunc("success", utxo_form.message);
-       console.log("Resolving: Utxo's have  been formatted: ", utxo_form.message);
+       console.log("Resolving: Utxo's have  been formatted: ", resp);
        resolve (resp);
       }
       if(!utxo_form.status){
        let resp = errorSet.errorFunc("fail",utxo_form.message);
-       console.log("Rejecting: Error Formatting Utxo: ", utxo_form.message);
+       console.log("Rejecting: Error Formatting Utxo: ",resp);
        resolve (resp);
       }
      });
