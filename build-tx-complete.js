@@ -44,7 +44,7 @@ function sign_tx (inputs,outputs,fee,change,pk){
    tx_to(0);
   }
   catch(e){
-   console.log("Rejecting: Caught error at sign_tx()",e});
+   console.log("Rejecting: Caught error at sign_tx()",e);
    reject (e);
   }
  });
