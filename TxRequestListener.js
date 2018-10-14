@@ -2,6 +2,7 @@
 HYFERx Project
 Tx Request Listener
 Listens for a client request to broadcast and sign transactions to a given output set
+output set is hard coded for testing purposes
 */
 //-o_O===<..>===================================================~|
 'use strict';
