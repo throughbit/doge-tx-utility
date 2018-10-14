@@ -3,6 +3,7 @@ Developed at ThroughBit Technologies Pvt.Ltd
 HYFERx Project
 Transaction input builder (UTxO)
 Requests remote node for unspent outputs of given addresses, which are used as inputs for requested transaction
+*/
 //-o_O===<o..o>=================================================~|
 'use strict';
 //-o_o===modules=================================================|
