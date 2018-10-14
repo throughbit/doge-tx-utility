@@ -1,8 +1,7 @@
 /*
 HYFERx Project
 Tx Request Listener
-Listens for a client request to create a transaction
-Genererates a transaction output set and calls broadcast_tx
+Listens for a client request to broadcast and sign transactions to a given output set
 */
 //-o_O===<..>===================================================~|
 'use strict';
