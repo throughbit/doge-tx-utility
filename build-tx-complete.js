@@ -54,7 +54,7 @@ function sign_tx (inputs,outputs,fee,change,pk){
       "inputs":inputs,
       "hex":hex
      }
-     loggit.write_log(true,log_data);
+     loggit.write_sign_log(true,log_data);
      //think about how to use this log incase broadcast fails
      
      let response = errorSet.errorFunc("success", hex); 
@@ -72,7 +72,7 @@ function sign_tx (inputs,outputs,fee,change,pk){
       "outputs":outputs,
       "inputs":inputs,
      };
-   loggit.write_log(false,log_data);
+   loggit.write_sign_log(false,log_data);
    reject (response);
   //think about a better strategy to deal with an unsuccessful sign. 
   //possibly call a waiter function that retries after a certain period, based on the error type.
