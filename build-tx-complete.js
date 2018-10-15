@@ -10,6 +10,8 @@ Builds a raw transaction and broadcasts to a remote node
 const digibyte = require('digibyte');
 const request = require('request');  
 
+const utxo = require('./build-tx-inputs');
+const txS = require('./build-tx-outputs');
 const loggit = require('./logs.js');
 var errorSet = require('./errors.js');
 //-o_o===/modules================================================|
