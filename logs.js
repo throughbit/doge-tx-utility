@@ -21,7 +21,7 @@ function write_sign_log(status,data){
  var f_log={
   "time":time,
   "status": "fail",
-  "message":`Error signing transactions.\nError: ${e}`,
+  "message":`Error signing transactions.`,
   "transaction_outputs": data.outputs,
   "transaction_inputs": data.inputs
   //next level: split addresses from amounts.
