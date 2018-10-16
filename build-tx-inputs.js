@@ -14,32 +14,33 @@ var errorSet = require('./errors.js');
 //NI_PORT: Port running node interface
 var NI_PORT = process.env.NI_PORT;
 const RPC_AUTH = process.env.RPC;
-const server_url = `http://localhost:${NI_PORT}/get_utxo`;
+const server_url = `http://localhost:${NI_PORT}/tx_detail_global`;
 
 //Link all addresses of the given key containing UTxO
 //-o_o===request-utxo============================================|
-function build_TxInputs(addresses) {
+function build_TxInputs(txid) {
  return new Promise((resolve,reject)=>{
   try{
+
    let options = {
       headers:{ "content-type": "application/JSON" },
       url: server_url,
       method: 'POST',
-      body:{"addresses":addresses},
+      body:{"txid":txid},
       json: true
    }
-   console.log("Options passed to get_utxo request: ", options);
+   console.log("Options passed to tx_detail_global request: ", options);
    request.post(options, (error, response, body)=>{
     if(error){
      let resp = errorSet.errorFunc("fail",error,[]);
-     console.log("Rejecting: error from request to get_utxo: ",error);
+     console.log("Rejecting: error from request to tx_detail_global: ",error);
      reject (resp);
      //retry?
     }
-    console.log("BODY FROM UTXO REQUEST: ",body);
+    console.log("BODY FROM tx_detail_global: ",body);
     if(body.status){
-     console.log("Request to/get_utxo returned body: ",body.message_array);
-     let utxo_set=body.message_array;
+     console.log("Request to /tx_detail_global returned body: ",body.message_object);
+     let utxo_set=body.message_object;
 
      utxo_format(utxo_set)
      .then((utxo_form)=>{
@@ -86,7 +87,7 @@ function utxo_format (utxos){
  return new Promise((resolve,reject)=>{
   try{
    //MAP METHOD
-   
+
    // var uform = utxos.map((val,i,utxos)=>{
    //  return val = {
    //    "txId" : utxos[i].txid,
@@ -97,22 +98,33 @@ function utxo_format (utxos){
    //  }
    // });
    // resolve(uform);
-   
+
    //RECURSION METHOD
+   const myaddress = process.env.ADD_0;
+   //this is the only address we will be using to send
+   //cold wallet only sends here
    var uform = new Array();
+   console.log("HERE TO FORMAT: \n",utxos);
    var collect_utxoform = function(i){
-    if(i < utxos.length){
-     //console.log("rec round: ", i);
-     uform.push({
-       "txId" : utxos[i].txid,
-       "outputIndex" : utxos[i].vout,
-       "address" : utxos[i].address,
-       "script":utxos[i].scriptPubKey,
-       "satoshis" : parseInt(utxos[i].amount * 100000000)
-     });
+    console.log("rec layer: ", 0);
+    if(i < utxos.vout.length){
+     console.log("rec layer: ", 1);
+     console.log(utxos.vout[i].scriptPubKey);
+     if(utxos.vout[i].scriptPubKey.addresses[0]===myaddress){
+      console.log("rec layer: ", 2);
+      uform.push({
+        "txId" : utxos.txid,
+        "outputIndex" : utxos.vout[i].n,
+        "address" : utxos.vout[i].scriptPubKey.addresses[0],
+        "script":utxos.vout[i].scriptPubKey.hex,
+        "satoshis" : parseInt(utxos.vout[i].value * 100000000)
+      });
+    }
+    console.log("rec layer: ", 3);
     collect_utxoform(i+1);
     }
-    if(i>=utxos.length){
+    if(i>=utxos.vout.length){
+     console.log("rec layer: ", 4);
      let resp = errorSet.errorFunc("success", "Sending Array", uform);
      console.log("Resolving: Recursion ended. UtXo's are formatted. \n",resp)
      resolve (resp);

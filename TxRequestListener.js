@@ -27,8 +27,8 @@ app.post('/test_send',(req,res)=>{
   //console.log("IN");
   //one apprach is to take outputs as part of req.body
   let outputs = [{
-   "address":"D8bTT8BK2gnzCVP3BYsCqiJPtkGVRxomVe",
-   "amount": parseInt(1*1000000)
+   "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
+   "amount": parseInt(1*10000)
   }];
   tx_build.broadcast_tx(outputs)
   .then((result)=>{
