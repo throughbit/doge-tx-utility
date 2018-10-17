@@ -19,8 +19,9 @@ const errorSet = require('./errors.js');
 //Obfuscate your pk even further than an env variable.
 //However, since this module will be isolated form the internet, env should suffice
 const WIF = process.env.WIF;
-const imported = digibyte.PrivateKey.fromWIF(process.env.WIF_0).toString();
-const changeAddress=process.env.ADD_0;
+const imported = digibyte.PrivateKey.fromWIF(WIF);
+const temp = '';
+const changeAddress='DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW';
 const fee=2000;
 const NI_PORT = process.env.NI_PORT;
 const digiurl = `http://localhost:${NI_PORT}/broadcastx`;
@@ -85,12 +86,10 @@ function sign_tx (inputs,outputs,fee,change,pk){
 function broadcast_tx(outputs){
  return new Promise((resolve,reject)=>{
   try{
-   const txid='b9fa12ae6ba2dce51b97a0c536707645ea829b40c93b11a306a08b6ea6454f55';
-   //txid will be sent everytime cold storage sends to this address. txid can be read from file
-   console.log("txid sent to /tx_detail_global:\n",txid);
+   const addresses=['DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW'];
    //read addresses from a file
    console.log("OUTPUTS: \n",outputs);
-   utxo.build_TxInputs(txid)
+   utxo.build_TxInputs(addresses)
    .then((inputs)=>{
     sign_tx(inputs.message_array,outputs,fee,changeAddress,imported)
     .then((hex)=>{
