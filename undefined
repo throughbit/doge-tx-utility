@@ -1,0 +1,12 @@
+{
+ "time": 1540893953835,
+ "status": "fail",
+ "message": "Error signing transactions.",
+ "transaction_outputs": [
+  {
+   "address": "DQPivtsrVEU1WnKuLbM7vfzQUp64Rp7u2k",
+   "amount": 5000
+  }
+ ]
+}
+#--------------------------------------------------------------------------------------------------------------- 

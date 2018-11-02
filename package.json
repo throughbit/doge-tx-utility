@@ -1,0 +1,38 @@
+{
+  "name": "dgbtxutility",
+  "version": "1.0.0",
+  "description": "digibyte transaction sign & broadcast",
+  "main": "command_line.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Laziemo/DGBTxUtility.git"
+  },
+  "keywords": [
+    "dgb",
+    "wallet",
+    "sign",
+    "broadcast"
+  ],
+  "preferGlobal": true,
+  "bin": "./command-line.js",
+  "author": "LMo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Laziemo/DGBTxUtility/issues"
+  },
+  "homepage": "https://github.com/Laziemo/DGBTxUtility#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "chai": "^4.2.0",
+    "commander": "^2.19.0",
+    "digibyte": "^0.14.8",
+    "express": "^4.16.4",
+    "helmet": "^3.14.0",
+    "mocha": "^5.2.0",
+    "mongoose": "^5.3.8",
+    "request": "^2.88.0"
+  }
+}

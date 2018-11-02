@@ -1,9 +1,7 @@
 /*
 Developed at ThroughBit Technologies Pvt.Ltd
 HYFERx Project
-Digibyte Transaction Builder
-Builds a raw transaction and signs offline.
-Broadcasts to a remote node - preferably over a local network to isolate keys from the internet
+
 */
 //-o_O===init===================================================~|
 'use strict';
