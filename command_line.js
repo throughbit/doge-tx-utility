@@ -8,9 +8,9 @@ Digibyte CommandLine Client
 'use strict';
 //-o_o===modules=================================================|
 var program = require('commander');
-const signer = require('./sign.js');
-const broadcast = require('./broadcast.js');
-const utxo = require('./inputs.js')
+const signer = require('./lib/sign.js');
+const broadcast = require('./lib/broadcast.js');
+const utxo = require('./lib/inputs.js')
 //-o_o===init====================================================|
 program
  .version('0.1.0')

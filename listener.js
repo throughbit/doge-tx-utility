@@ -14,11 +14,10 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const transactionSchema = require('./models/transaction');
-const tx_util = require('./construct_tx')
-const res_fmt = require('./response_format.js');
-const errors = require('./handle_errors');
-const holdup = require('./wait');
-const async_looper = require('./async_loop');
+const tx_util = require('./lib/construct_tx')
+const errors = require('./lib/handle_errors');
+const async_looper = require('./lib/async_loop');
+const res_fmt = require('./lib/response_format');
 //-o_o===init======================================================|
 mongoose.connect("mongodb://localhost:27017/transactions",{"useNewUrlParser": true});
 const ObjectId=mongoose.Types.ObjectId;
@@ -47,17 +46,17 @@ app.post('/test_send',(req,res)=>{
     let send_orders = [{
       "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
       "amount":5000,
-      "orderId":"TBDGB-9J298IJQ9"
+      "orderId":"TBDGB-9J298IJQ12312"
     },
     {
       "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
       "amount":5000,
-      "orderId":"TBDGB-95T698IJQ0"
+      "orderId":"TBDGB-95T698IJQ1231"
     },
     {
       "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
       "amount":5000,
-      "orderId":"TBDGB-9KL98IJQ1"
+      "orderId":"TBDGB-9KL98IJQ122"
     }];
     
     let filtered_orders=new Array();
@@ -76,10 +75,12 @@ app.post('/test_send',(req,res)=>{
     async_looper.go(send_orders,(orders,report)=>{ //orders is the iterator 'send_orders[i]' in the for loop defined in async_loop
       transactionSchema.findOne({orderId:orders.orderId})//search db for orders with this orderId
       .exec((err,data)=>{
+        
         let output = {
           "address": "",
           "amount": 0
         };
+
         if(data==null){
           console.log(`Okay, zis Order:${orders.orderId} is not exist. Don't a worry. I will a send for process!`);
           
@@ -101,7 +102,7 @@ app.post('/test_send',(req,res)=>{
             report();
           }
           else {
-            console.log(`No txid for zis Order:${orders.orderId}. Don't a worry. I will send for a process!\n`,data);
+            console.log(`No txid for:${orders.orderId}. Added for processzing.\n`,data);
            
             filtered_orders.push(orders);
 
@@ -143,6 +144,7 @@ app.post('/test_send',(req,res)=>{
           res.send(response);
         })
         .catch((e)=>{
+          console.log("Caught:\n", e);
           res.send(errors.handle(e));
         });
       }
@@ -164,9 +166,10 @@ app.post('/test_send',(req,res)=>{
 
 let process_and_update=(output_set,filtered_orders)=>{
   try{
-    let order_txid=new Array();
+  
     //consider: take a single input with orderId and create output_set locally
-    return new Promise((reject,resolve)=>{
+    return new Promise((resolve,reject)=>{
+      let order_txid=new Array();
       tx_util.build(output_set)
       .then((tx_hex)=>{//is signed
 
@@ -175,7 +178,7 @@ let process_and_update=(output_set,filtered_orders)=>{
           .exec((err,data)=>{
             if(data===null){
               let _tx = new transactionSchema({
-                orderId : element.orderId,
+                orderId : element.orderId,//can be added in the previous mongo call. 
                 to: element.address,
                 amount:element.amount
               });
@@ -230,6 +233,7 @@ let process_and_update=(output_set,filtered_orders)=>{
             },()=>{
                 let response = res_fmt.create(true, order_txid);
                 console.log(`Success Response: toFinal->`, response);
+                console.log("\nHERE!!!!!!!!!!!!\n");
                 resolve(response);
             });     
           })
