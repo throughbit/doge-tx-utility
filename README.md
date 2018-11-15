@@ -41,8 +41,11 @@ the result is then parsed into the format required by digibyte-lib as **inputs**
 once fetched and formatted __inputs__ are resolved .then(sign_tx.()) is called.
 
         
-- __**sign_tx(inputs, outputs, fee, change, pk)**__: /lib/sign.js
-   
+### **/lib/sign.js**
+
+
+- __**sign_tx(inputs, outputs, fee, change, pk)**__: Called by build(outputs)
+
 signs transactions using inputs and outputs fetched via requests. Fee change and pk are hardcoded global/env variables. 
     
 *No requests are made within sign_tx() in order to isolate the module that performs operations using the pk from modules.
@@ -51,7 +54,7 @@ This removes concerns about dodgy async behaviour affecting any critical pk rela
 
 More checks required within sign_tx() to ensure inputs and outputs are correctly formatted and verified before signing.* 
         
--> After sign_tx() resolves a __tx_hex__, control flows back to broadcast_tx which .then() passes the hex to broadcast().
+-> After sign_tx() resolves a __tx_hex__, control flows back to listener.js which .then() passes the hex to broadcast().
 
 
 - **__broadcast(hex)__**:
