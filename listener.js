@@ -19,7 +19,14 @@ const errors = require('./lib/handle_errors');
 const async_looper = require('./lib/async_loop');
 const res_fmt = require('./lib/response_format');
 //-o_o===init======================================================|
-mongoose.connect("mongodb://localhost:27017/transactions",{"useNewUrlParser": true});
+mongoose.connect("mongodb://localhost:27017/transactions",{"useNewUrlParser": true}, (error)=>{
+  if(error){
+  console.log("MongoDb is not connected.");
+  }
+  else{
+    console.log("Successfully connected to MongoDb");
+  }
+});
 const ObjectId=mongoose.Types.ObjectId;
 
 var app = express();
@@ -43,21 +50,23 @@ app.post('/test_send',(req,res)=>{
     // })
     //-------------------------------------------LOGIC------------------------------------------------------
 
-    let send_orders = [{
+    let send_orders = [
+    {
       "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
       "amount":5000,
-      "orderId":"TBDGB-9J298IJQ12312"
+      "orderId":"TBDGB-9J298IJQ1234"
     },
     {
       "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
       "amount":5000,
-      "orderId":"TBDGB-95T698IJQ1231"
+      "orderId":"TBDGB-95T698IJQ1235"
     },
     {
       "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
       "amount":5000,
-      "orderId":"TBDGB-9KL98IJQ122"
-    }];
+      "orderId":"TBDGB-9KL98IJQ1236"
+    }
+    ];
     
     let filtered_orders=new Array();
     let output_set=new Array();
@@ -81,7 +90,7 @@ app.post('/test_send',(req,res)=>{
           "amount": 0
         };
 
-        if(data==null){
+        if(data===null){
           console.log(`Okay, zis Order:${orders.orderId} is not exist. Don't a worry. I will a send for process!`);
           
           filtered_orders.push(orders);
@@ -158,7 +167,7 @@ app.post('/test_send',(req,res)=>{
     //Check transactionDB if orderID is already processed
   }
   catch(e){
-  res.send(errors.handle(e));
+    res.send(errors.handle(e));
   }
 });
 
@@ -237,10 +246,13 @@ let process_and_update=(output_set,filtered_orders)=>{
                 resolve(response);
             });     
           })
+          .catch((e)=>{
+            reject(e);
+          })
         });
       })
       .catch((e)=>{
-        reject(errors.handle(e));
+        reject(e);
       });
     });
   }
