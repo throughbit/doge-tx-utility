@@ -21,10 +21,12 @@ Currently uses mongodb as the first step in control flow.
 
 Only orderId's that either do not exist or do not have a txid, will be processed. 
 
-## **/lib/construct_tx.js** 
+### **/lib/construct_tx.js** 
 provides DGB Key services. contains two functions:
     
-   - **__broadcast_tx(ouputs)__**: 
+   - **__build(ouputs)__**: 
+       
+        builds and signs transactions.
    
         calls build_tx_inputs(addresses) from **inputs.js** to generate **transaction inputs**. 
         
@@ -48,14 +50,14 @@ More checks required within sign_tx() to ensure inputs and outputs are correctly
         
 -> After sign_tx() resolves a __tx_hex__, control flows back to broadcast_tx which .then() passes the hex to broadcast().
 
-    - **__broadcast_tx(ouputs)__**:
+- **__broadcast(hex)__**:
          
          connects to a remote node and provides a raw tx-hex to the sendrawtransaction function. 
 
 
          upon receipt of a __txid__ broadcast() will resolve back to the listener.js which will then respond back to the client with a __txid__ of the *successful* transaction.
 
-## /lib/response_format.js
+### /lib/response_format.js
 
 Defines a format for passing responses. All responses follow the format: 
 
@@ -69,7 +71,7 @@ Responses are created by calling:
 
 eg. **{status: true, message: "Successfully saved"}**
 
-## /lib/handle_errors.js
+### /lib/handle_errors.js
 
 Defines all possible errors and creates error objects that display the entire stack trace to allow ease of debugging. 
 
