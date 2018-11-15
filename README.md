@@ -9,6 +9,7 @@ Digibyte utitlity for signing and broadcasting transactions to an external node.
 **curl -X POST "http://localhost:$L_PORT/test_send"**
 
 ## **listener.js** 
+
 listens for requests from a  client to create a transaction. 
 
 In this test case - the client is the system making the above curl request. 
@@ -22,25 +23,27 @@ Currently uses mongodb as the first step in control flow.
 Only orderId's that either do not exist or do not have a txid, will be processed. 
 
 ### **/lib/construct_tx.js** 
+
 provides DGB Key services. contains two functions:
     
-   - **__build(ouputs)__**: 
+- **__build(ouputs)__**: 
        
-        builds and signs transactions.
+builds and signs transactions.
    
-        calls build_tx_inputs(addresses) from **inputs.js** to generate **transaction inputs**. 
+calls build_tx_inputs(addresses) from **inputs.js** to generate **transaction inputs**. 
         
-        -   *addresses here are the available utxo address for the given key* .
+-   *addresses here are the available utxo address for the given key* .
    
-        build_tx_tnputs() makes a request to our remote node interface calling endpoint /get_utxo. 
+build_tx_tnputs() makes a request to our remote node interface calling endpoint /get_utxo. 
                     
-        the result is then parsed into the format required by digibyte-lib as **inputs**
+the result is then parsed into the format required by digibyte-lib as **inputs**
         
-        once fetched and formatted __inputs__ are resolved .then(sign_tx.()) is called.
+once fetched and formatted __inputs__ are resolved .then(sign_tx.()) is called.
+
         
-   - __**sign_tx(inputs, outputs, fee, change, pk)**__: /lib/sign.js
+- __**sign_tx(inputs, outputs, fee, change, pk)**__: /lib/sign.js
    
-        signs transactions using inputs and outputs fetched via requests. Fee change and pk are hardcoded global/env variables. 
+signs transactions using inputs and outputs fetched via requests. Fee change and pk are hardcoded global/env variables. 
     
 *No requests are made within sign_tx() in order to isolate the module that performs operations using the pk from modules.
 
@@ -50,12 +53,13 @@ More checks required within sign_tx() to ensure inputs and outputs are correctly
         
 -> After sign_tx() resolves a __tx_hex__, control flows back to broadcast_tx which .then() passes the hex to broadcast().
 
+
 - **__broadcast(hex)__**:
          
-         connects to a remote node and provides a raw tx-hex to the sendrawtransaction function. 
+connects to a remote node and provides a raw tx-hex to the sendrawtransaction function. 
 
 
-         upon receipt of a __txid__ broadcast() will resolve back to the listener.js which will then respond back to the client with a __txid__ of the *successful* transaction.
+upon receipt of a __txid__ broadcast() will resolve back to the listener.js which will then respond back to the client with a __txid__ of the *successful* transaction.
 
 ### /lib/response_format.js
 
