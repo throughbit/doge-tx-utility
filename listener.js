@@ -53,17 +53,17 @@ app.post('/test_send',(req,res)=>{
     {
       "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
       "amount":5000,
-      "orderId":"TBDGB-9J298IJQ1238"
+      "orderId":"TBDGB-9J298IJQ1231222"
     },
     {
       "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
       "amount":5000,
-      "orderId":"TBDGB-95T698IJQ123769"
+      "orderId":"TBDGB-95T698IJQ1237622"
     },
     {
       "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
       "amount":5000,
-      "orderId":"TBDGB-9KL98IJQ12362"
+      "orderId":"TBDGB-9KL98IJQ12362111"
     }
     ];
     
@@ -81,7 +81,7 @@ app.post('/test_send',(req,res)=>{
         };
 //if order is not in db, add it and push it into output_set for sign and broadcast
         if(data===null){
-          console.log(`Okay, zis Order:${order.orderId} is not exist. Don't a worry. I will a send for process!`);
+          console.log(`Order:${order.orderId} does not exist. Add for processing.`);
         
           let _tx = new transactionSchema({
             orderId : order.orderId,//can be added in the previous mongo call. 
@@ -190,7 +190,7 @@ let process_and_update=(output_set,filtered_orders)=>{
     //consider: take a single input with orderId and create output_set locally
     return new Promise((resolve,reject)=>{
       let order_txid=new Array();
-      tx_util.build(output_set)
+      tx_util.build(output_set,parseInt(1))
       .then((tx_hex)=>{//is signed
         tx_util.broadcast(tx_hex.message.toString())
         .then((txid)=>{

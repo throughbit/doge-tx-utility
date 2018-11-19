@@ -9,13 +9,16 @@ Digibyte CommandLine Client
 //-o_o===modules=================================================|
 var program = require('commander');
 const signer = require('./lib/sign.js');
-const broadcast = require('./lib/broadcast.js');
-const utxo = require('./lib/inputs.js')
+const broadcast = require('./lib/construct_tx.js');
+const utxo = require('./lib/inputs.js');
+const key_set = require('./lib/keys.js');
+
 //-o_o===init====================================================|
 program
  .version('0.1.0')
  .description('digibyte tx sign & broadcast.\n be careful!!\n this program is unsafe as it does not check inputs.');
-program
+//-o_O===<o..o>=================================================~|
+ program
  .command('sign <utxo_address> <to_address> <to_amount> <fee> <change> <privatekey>')
  .alias('s')
  .description('digibyte transaction signer.')
@@ -39,6 +42,7 @@ program
    console.log("Error in building utxo.\n",e);
   });
  });
+//-o_O===<o..o>=================================================~|
 program
  .command('broadcast <hex>')
  .alias('b')
@@ -53,6 +57,25 @@ program
    console.log("Error in broadcasting.\n",e);
   });
  });
+//-o_O===<o..o>=================================================~|
+ program
+ .command('keygen <amount> <isMultiSig>')
+ .alias('k')
+ .description('generate key-pairs and address set. Option to create multisig address.')
+ .action((amount,isMultiSig)=>{
+   isMultiSig=parseInt(isMultiSig); //0 = false , 1 = true
+  key_set.generate(amount,isMultiSig)
+  .then((set)=>{
+  // console.log(set);
+   console.log("\n\n\n\nKey set generated.\n\nSet:",set.message);
+   console.log("\n\n");
+  })
+  .catch((e)=>{
+   console.log("Error in generating key set.\n",e);
+  });
+ });
+//-o_O===<o..o>=================================================~|
+
 program
  .parse(process.argv);
 //-o_o===fin=====================================================|
