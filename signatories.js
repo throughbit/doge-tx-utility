@@ -1,5 +1,5 @@
 /*
-signatories: server maintained by all multisig signatories
+Signatories: server maintained by all multisig signatories
 
 Developed at ThroughBit Technologies Pvt. Ltd.
 HYFERx Project

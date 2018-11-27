@@ -1,8 +1,27 @@
 /*
+Send Listener
+
+Developed at ThroughBit Technologies Pvt.Ltd
 HYFERx Project
-Tx Request Listener
-Listens for a client request to broadcast and sign transactions to a given output set
-output set is hard coded for testing purposes
+
+***REQUEST FORMAT:
+ send_orders = [
+    {
+      "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
+      "amount":5000,
+      "orderId":"TBDGB-9J298IJQ12312221"
+    },
+    {
+      "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
+      "amount":5000,
+      "orderId":"TBDGB-95T698IJQ12376222"
+    },
+    {
+      "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
+      "amount":5000,
+      "orderId":"TBDGB-9KL98IJQ123621113"
+    }
+    ];
 */
 //-o_O===<..>===================================================~|
 'use strict';
@@ -38,34 +57,10 @@ app.use(bodyParser.urlencoded({extended:true}));
 //Outputs will have to be provided by listening to a client
 //Hardcoded for testing
 //-o_o===server-===================================================|
-app.post('/test_send',(req,res)=>{
+app.post('/send',(req,res)=>{
   try{
-     //-------------------------------------------LOGIC------------------------------------------------------
-    // filter_request(req.body.send_orders)
-    // .then((tx_outputs)=>{
-    //   process_and_update(tx_outputs)
-    // })
-    // .catch((e)=>{
-    //   errors.handle(e);
-    // })
-    //-------------------------------------------LOGIC------------------------------------------------------
-    let send_orders = [
-    {
-      "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
-      "amount":5000,
-      "orderId":"TBDGB-9J298IJQ1231222"
-    },
-    {
-      "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
-      "amount":5000,
-      "orderId":"TBDGB-95T698IJQ1237622"
-    },
-    {
-      "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
-      "amount":5000,
-      "orderId":"TBDGB-9KL98IJQ12362111"
-    }
-    ];
+
+    const send_orders = req.body.send_orders;
     
     let filtered_orders=new Array();//includes orderId
     let output_set=new Array();//output_set passed for signing
@@ -190,7 +185,7 @@ let process_and_update=(output_set,filtered_orders)=>{
     //consider: take a single input with orderId and create output_set locally
     return new Promise((resolve,reject)=>{
       let order_txid=new Array();
-      tx_util.build(output_set,parseInt(1))
+      tx_util.build(output_set,parseInt(1))//Setting multisig = 1 
       .then((tx_hex)=>{//is signed
         tx_util.broadcast(tx_hex.message.toString())
         .then((txid)=>{
@@ -200,7 +195,7 @@ let process_and_update=(output_set,filtered_orders)=>{
               if(err!=null){
                 //If no error was thrown when creating db entry at tx_util.build() whats up here? 
                 //Control should not ever be reaching here in production!
-                console.log("Error writing to dB. Uh-oh PANIC!!This transaction could be broadcasted twice! Notify client!")
+                console.log("Error writing to dB. Uh-oh PANIC!!This transaction could be broadcasted twice! Notify client!");
               }
 
               let dataId = data._id;

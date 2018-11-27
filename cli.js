@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 /*
+Digibyte CommandLine Client
+
 Developed at ThroughBit Technologies Pvt.Ltd
 HYFERx Project
-Digibyte CommandLine Client
 */
 //-o_O===<o..o>=================================================~|
 'use strict';
