@@ -63,7 +63,7 @@ app.post('/send',(req,res)=>{
     const send_orders = req.body.send_orders;
     
     let filtered_orders=new Array();//includes orderId
-    let output_set=new Array();//output_set passed for signing
+    let output_set=new Array();//output_set passed for signing(filtered_orders minus orderId)
     let report_txid=new Array();//completed orders with txid for reporting back to client
 //-o_o===filter-request--==========================================|
     async_looper.go(send_orders,(order,report)=>{ //order is the iterator 'send_orders[i]' in the for loop defined in async_loop
@@ -76,7 +76,7 @@ app.post('/send',(req,res)=>{
         };
 //if order is not in db, add it and push it into output_set for sign and broadcast
         if(data===null){
-          console.log(`Order:${order.orderId} does not exist. Add for processing.`);
+          console.log(`Order:${order.orderId} does not exist. Adding for processing.`);
         
           let _tx = new transactionSchema({
             orderId : order.orderId,//can be added in the previous mongo call. 
@@ -86,7 +86,7 @@ app.post('/send',(req,res)=>{
 
           _tx.save((e)=> { 
             if(e!=null){
-              console.log("Error writing to dB.");
+              console.log("Error writing to dB. Try again.");
               res.send(errors.handle(e));
             }
             else{
@@ -100,7 +100,7 @@ app.post('/send',(req,res)=>{
           output.amount=order.amount;
           output_set.push(output);
           
-          report();
+          report();//reference counter in async loop. 
         }
 //if order is in db check if it has a txid or not
         else if(data!=null){
@@ -138,7 +138,7 @@ app.post('/send',(req,res)=>{
       // console.log(filtered_orders);
       if(output_set.length===0){
         console.log("OutputSet is empty. All transactions have been processed.");
-        if(report_txid.length>0){
+        if(report_txid.length>0){//if there are txid's to report
           let response = res_fmt.create(true,report_txid);
           res.send(response);
         }
@@ -150,16 +150,16 @@ app.post('/send',(req,res)=>{
       if(output_set.length>0){
         process_and_update(output_set,filtered_orders)
         .then((response)=>{//signed,broadcasted and updated to db
-          if(report_txid.length!=0){//if some transactions were already done, add it to the response set
+          if(report_txid.length!=0){//if some transactions were already completed, add it to the response set
            report_txid.forEach((element)=>{
              response.message.push(element);
            })  
           }
-          console.log("FINAL RESPONSE:\n", response);
+          console.log("FINAL RESPONSE:\n", JSON.stringify(response));
           res.send(response);
         })
         .catch((e)=>{
-          console.log("Caught:\n", e);
+          console.log("Caught at listener:\n", e);
           res.send(errors.handle(e));
         });
       }
@@ -189,6 +189,7 @@ let process_and_update=(output_set,filtered_orders)=>{
       .then((tx_hex)=>{//is signed
         tx_util.broadcast(tx_hex.message.toString())
         .then((txid)=>{
+          console.log(`Broadcast result:\n${txid.message.result}`);
           async_looper.go(filtered_orders,(order,report)=>{
             transactionSchema.findOne({orderId: order.orderId})
             .exec((err,data)=>{
@@ -201,11 +202,11 @@ let process_and_update=(output_set,filtered_orders)=>{
               let dataId = data._id;
               delete data._id;
       
-              data.txId = txid.message;
+              data.txId = txid.message.result;
               
               order_txid.push({
                 "orderId":order.orderId,
-                "txId":txid.message
+                "txId":txid.message.result
               });
 
               transactionSchema.updateOne({ _id: {$eq:ObjectId(dataId)} }, data, (err,data)=>{
@@ -223,8 +224,8 @@ let process_and_update=(output_set,filtered_orders)=>{
             });
           },()=>{
               let response = res_fmt.create(true, order_txid);
-              console.log(`Success Response: toFinal->`, response);
-              console.log("\nHERE!!!!!!!!!!!!\n");
+              //console.log(`Success Response: toFinal->`, response);
+              //console.log("\nHERE!!!!!!!!!!!!\n");
               resolve(response);
           });     
         })
