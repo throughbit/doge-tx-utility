@@ -49,7 +49,7 @@ mongoose.connect("mongodb://localhost:27017/transactions",{"useNewUrlParser": tr
 const ObjectId=mongoose.Types.ObjectId;
 
 var app = express();
-const L_PORT=2020;
+const L_PORT=process.env.LPORT;
 app.use(helmet());
 app.use(helmet.noCache());
 app.use(bodyParser.json())
