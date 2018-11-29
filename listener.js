@@ -4,24 +4,6 @@ Send Listener
 Developed at ThroughBit Technologies Pvt.Ltd
 HYFERx Project
 
-***REQUEST FORMAT:
- send_orders = [
-    {
-      "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
-      "amount":5000,
-      "orderId":"TBDGB-9J298IJQ12312221"
-    },
-    {
-      "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
-      "amount":5000,
-      "orderId":"TBDGB-95T698IJQ12376222"
-    },
-    {
-      "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
-      "amount":5000,
-      "orderId":"TBDGB-9KL98IJQ123621113"
-    }
-    ];
 */
 //-o_O===<..>===================================================~|
 'use strict';

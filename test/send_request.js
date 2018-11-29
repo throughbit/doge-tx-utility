@@ -9,7 +9,7 @@ HYFERx Project
 'use strict';
 //-o_o===modules===================================================|
 const res_fmt = require('../lib/response_format.js');
-const req_options = require('../lib/request_options.js');
+const req_options = require('../lib/options.js');
 const errors = require('../lib/handle_errors_serialized.js');
 
 const bodyParser = require('body-parser');
@@ -22,17 +22,17 @@ let send_orders = [
   {
     "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
     "amount":5000,
-    "orderId":"TBDGB-9J298IJQ123122211312111"
+    "orderId":"TBDGB-9J298IJQ1231222113121119"
   },
   {
     "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
     "amount":5000,
-    "orderId":"TBDGB-95T698IJQ123762352221112"
+    "orderId":"TBDGB-95T698IJQ1237623522211129"
   },
   {
     "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
     "amount":5000,
-    "orderId":"TBDGB-9KL98IJQ12362111321351113"
+    "orderId":"TBDGB-9KL98IJQ123621113213511139"
   }
   ];
 //-o_o===req=======================================================|
