@@ -8,12 +8,12 @@ HYFERx Project
 //-o_O===<o..o>=================================================~|
 'use strict';
 //-o_o===modules=================================================|
-var program = require('commander');
 const signer = require('./lib/sign.js');
 const broadcast = require('./lib/construct_tx.js');
 const utxo = require('./lib/inputs.js');
 const key_set = require('./lib/keys.js');
 
+let program = require('commander');
 //-o_o===init====================================================|
 program
  .version('0.1.0')

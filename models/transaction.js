@@ -10,6 +10,7 @@ HYFERx Project
 'use strict';
 //-o_o===modules=================================================|
 const mongoose = require('mongoose');
+//-o_o===schema==================================================|
 const Schema = mongoose.Schema;
 
 const transactionSchema = new Schema({

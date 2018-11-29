@@ -8,30 +8,31 @@ HYFERx Project
 //-<..>===========================================================~|
 'use strict';
 //-o_o===modules===================================================|
-const res_fmt = require('./response_format.js');
-const req_options = require('./request_options.js');
-const errors = require('./handle_errors.js');
+const res_fmt = require('../lib/response_format.js');
+const req_options = require('../lib/request_options.js');
+const errors = require('../lib/handle_errors_serialized.js');
 
 const bodyParser = require('body-parser');
 const request = require ('request');
 //-o_o===init======================================================|
-const _ep =`http://localhost:2020/send`;
+const _ep =`http://localhost:${process.env.L_PORT}/send`;
 //Example format
+console.log(_ep);
 let send_orders = [
   {
     "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
     "amount":5000,
-    "orderId":"TBDGB-9J298IJQ1231222113"
+    "orderId":"TBDGB-9J298IJQ123122211312111"
   },
   {
     "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
     "amount":5000,
-    "orderId":"TBDGB-95T698IJQ123762352"
+    "orderId":"TBDGB-95T698IJQ123762352221112"
   },
   {
     "address": "DBDAhnDHhs1qRdW2tURnc95JrAy5eK5WbW",
     "amount":5000,
-    "orderId":"TBDGB-9KL98IJQ123621113213"
+    "orderId":"TBDGB-9KL98IJQ12362111321351113"
   }
   ];
 //-o_o===req=======================================================|
@@ -41,22 +42,20 @@ let send_req = (send_orders)=>{
       const _body = {"send_orders":send_orders};
       req_options.build(_ep,_body,"POST")
       .then((options)=>{
+        //console.log(`Built options:${JSON.stringify(options)}`)
         request(options, (error,response,body)=>{
           if(error){
             reject(errors.handle(error));
           }
         console.log(body);
           if(body===undefined){
-            let responso = res_fmt.create("false", body);
-            reject(responso);
+            reject(res_fmt.create("false", `Got undefined body from request to ${_ep}`));
           }
           if(body.status){
-            let responso  = res_fmt.create("true", body.message)
-            resolve(responso);
+            resolve(res_fmt.create("true", body.message));
           }
           else{
-            let responso  = res_fmt.create("false", body.message)
-            reject(responso);
+            reject(res_fmt.create("false", body.message));
           }
         });
       })

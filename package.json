@@ -1,8 +1,8 @@
 {
   "name": "dgbtxutility",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "digibyte transaction sign & broadcast",
-  "main": "command_line.js",
+  "main": "cli.js",
   "scripts": {
     "test": "test"
   },
@@ -34,6 +34,7 @@
     "mocha": "^5.2.0",
     "mongoose": "^5.3.8",
     "request": "^2.88.0",
-    "serialize-error": "^3.0.0"
+    "serialize-error": "^3.0.0",
+    "slack-node": "^0.1.8"
   }
 }

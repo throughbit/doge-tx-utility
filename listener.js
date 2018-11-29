@@ -26,17 +26,17 @@ HYFERx Project
 //-o_O===<..>===================================================~|
 'use strict';
 //-o_O===modules================================================~|
+const transactionSchema = require('./models/transaction');
+const tx_util = require('./lib/construct_tx')
+const errors = require('./lib/handle_errors');
+const async_looper = require('./lib/async_loop');
+const res_fmt = require('./lib/response_format');
 
 const express = require('express');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-const transactionSchema = require('./models/transaction');
-const tx_util = require('./lib/construct_tx')
-const errors = require('./lib/handle_errors');
-const async_looper = require('./lib/async_loop');
-const res_fmt = require('./lib/response_format');
 //-o_o===init======================================================|
 mongoose.connect("mongodb://localhost:27017/transactions",{"useNewUrlParser": true}, (error)=>{
   if(error){
@@ -48,8 +48,9 @@ mongoose.connect("mongodb://localhost:27017/transactions",{"useNewUrlParser": tr
 });
 const ObjectId=mongoose.Types.ObjectId;
 
-var app = express();
-const L_PORT=process.env.LPORT;
+let app = express();
+const L_PORT=process.env.L_PORT;
+console.log(L_PORT);
 app.use(helmet());
 app.use(helmet.noCache());
 app.use(bodyParser.json())
@@ -139,27 +140,30 @@ app.post('/send',(req,res)=>{
       if(output_set.length===0){
         console.log("OutputSet is empty. All transactions have been processed.");
         if(report_txid.length>0){//if there are txid's to report
-          let response = res_fmt.create(true,report_txid);
-          res.send(response);
+          res.send(res_fmt.create(true,report_txid));
         }
         else{//most likely an empty set created.
-          let response = res_fmt.create(false,"No outputs. No txId's to report. Check your request.");
-          res.send(response);
+          res.send(res_fmt.create(false,"No outputs. No txId's to report. Check your request."));
         }
       }
       if(output_set.length>0){
         process_and_update(output_set,filtered_orders)
         .then((response)=>{//signed,broadcasted and updated to db
           if(report_txid.length!=0){//if some transactions were already completed, add it to the response set
-           report_txid.forEach((element)=>{
-             response.message.push(element);
-           })  
+            async_looper.go(report_txid,(orders,report)=>{
+              response.push(orders);
+              report();
+            },()=>{
+                console.log("FINAL RESPONSE:\n", JSON.stringify(response));
+                res.send(res_fmt.create(true,response));
+            });
           }
-          console.log("FINAL RESPONSE:\n", JSON.stringify(response));
-          res.send(response);
+          else{
+            res.send(res_fmt.create(true,response));
+          }  
         })
         .catch((e)=>{
-          console.log("Caught at listener:\n", e);
+          console.log("Error at Listener:\n", e);
           res.send(errors.handle(e));
         });
       }
@@ -187,9 +191,9 @@ let process_and_update=(output_set,filtered_orders)=>{
       let order_txid=new Array();
       tx_util.build(output_set,parseInt(1))//Setting multisig = 1 
       .then((tx_hex)=>{//is signed
-        tx_util.broadcast(tx_hex.message.toString())
-        .then((txid)=>{
-          console.log(`Broadcast result:\n${txid.message.result}`);
+        tx_util.broadcast(tx_hex.toString())
+        .then((txid)=>{//returns unformatted
+          console.log(`Broadcast result:\n${txid}`);
           async_looper.go(filtered_orders,(order,report)=>{
             transactionSchema.findOne({orderId: order.orderId})
             .exec((err,data)=>{
@@ -202,11 +206,11 @@ let process_and_update=(output_set,filtered_orders)=>{
               let dataId = data._id;
               delete data._id;
       
-              data.txId = txid.message.result;
+              data.txId = txid;
               
               order_txid.push({
                 "orderId":order.orderId,
-                "txId":txid.message.result
+                "txId":txid
               });
 
               transactionSchema.updateOne({ _id: {$eq:ObjectId(dataId)} }, data, (err,data)=>{
@@ -223,10 +227,9 @@ let process_and_update=(output_set,filtered_orders)=>{
               });
             });
           },()=>{
-              let response = res_fmt.create(true, order_txid);
               //console.log(`Success Response: toFinal->`, response);
               //console.log("\nHERE!!!!!!!!!!!!\n");
-              resolve(response);
+              resolve(order_txid);
           });     
         })
         .catch((e)=>{
@@ -244,6 +247,6 @@ let process_and_update=(output_set,filtered_orders)=>{
 }
 //-o_o===server-===================================================|
 app.listen(L_PORT,()=>
- console.log(`TxRequest Listener running on port ${L_PORT}`)
+ console.log(`Digibyte send-server listnening on port:${L_PORT}`)
 );
 //-o_o===fin=======================================================|

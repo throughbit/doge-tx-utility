@@ -7,12 +7,12 @@ HYFERx Project
 //-<..>===========================================================~|
 'use strict';
 //-o_o===init======================================================|
+const res_fmt = require('./lib/response_format');
+
 const express = require('express');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const digibyte = require('digibyte');
-
-const res_fmt = require('./lib/response_format');
 //-o_o===setup=====================================================|
 const app = express();
 const PORT=process.env.MSPORT;
@@ -26,13 +26,13 @@ app.get("/", (req,res)=>{
 
   let multiSigTx = new digibyte.Transaction(req.body).sign(process.env.MSPK2);
 
- // assert(multiSigTx.isFullySigned());
-  console.log(`SignedTx at Signatory: ${JSON.stringify(multiSigTx.isFullySigned())}`);
-  let response = res_fmt.create(true,multiSigTx.toObject());
-  res.send(response);
+  //assert(multiSigTx.isFullySigned());
+  //console.log(`SignedTx at Signatory: ${JSON.stringify(multiSigTx.isFullySigned())}`);
+  
+  res.send(res_fmt.create(true,multiSigTx.toObject()));
 })
 //-o_o===exports===================================================|
 app.listen(PORT,()=>
- console.log(`Signatory server live at ${PORT}`)
+ console.log(`Signatory server listening at port:${PORT}`)
 );
 //-o_o===fin=======================================================|
