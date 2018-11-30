@@ -1,8 +1,8 @@
-# DGBTxUtility
+# doge_tx_util
 
 **Test Version**
 
-Digibyte utility for signing and broadcasting transactions to a full-node via a node interface.
+Dogecoin utility for signing and broadcasting transactions to a full-node via a node interface.
 
 ### Test Control Flow:
 
@@ -13,7 +13,7 @@ Change hardcoded orderId for each test run
 
 ### Notes:
 
-- Transactions must only be made with a time interval of 6 blocks since UTxO's are hard-coded to only be spendable after 2 confirmations. This equates to ~30 seconds. This can be changed by adjusting the minconf value in the express endpoint for listunspent in the interface.js from BTCServices.
+- Transactions must only be made with a time interval of 6 blocks since UTxO's are hard-coded to only be spendable after 2 confirmations. This equates to ~30 seconds. This can be changed by adjusting the minconf value in the express endpoint for listunspent in the interface.js from btc-node-interface.
 
 - importaddress for addresses used in sendwallet
 

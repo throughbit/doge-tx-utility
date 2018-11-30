@@ -1,7 +1,7 @@
 {
-  "name": "dgbtxutility",
+  "name": "doge-tx-utility",
   "version": "0.1.1",
-  "description": "digibyte transaction sign & broadcast",
+  "description": "doge transaction sign & broadcast",
   "main": "cli.js",
   "scripts": {
     "test": "test"
@@ -29,6 +29,7 @@
     "chai": "^4.2.0",
     "commander": "^2.19.0",
     "digibyte": "^0.14.8",
+    "dogecore-lib": "^0.14.0",
     "express": "^4.16.4",
     "helmet": "^3.14.0",
     "mocha": "^5.2.0",

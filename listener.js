@@ -229,6 +229,6 @@ let process_and_update=(output_set,filtered_orders)=>{
 }
 //-o_o===server-===================================================|
 app.listen(L_PORT,()=>
- console.log(`Digibyte send-server listnening on port:${L_PORT}`)
+ console.log(`Doge send-server listnening on port:${L_PORT}`)
 );
 //-o_o===fin=======================================================|

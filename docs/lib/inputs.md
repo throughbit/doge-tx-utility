@@ -14,7 +14,7 @@ senders {address,utxo} form the input to a transaction & the receivers {address,
 **Note**    
 listunspent method on the local node only works for local addresses. Non local addresses must be added using the importaddress method which is served at the /import_address endpoint at the node interface. If this utility is being used in a wallet application, every new client's addresses must be automatically imported upon creation.
 
-Once the interface returns the utxo set for the given address, it is formatted for digibyte-lib as follows:
+Once the interface returns the utxo set for the given address, it is formatted for dogecore-lib as follows:
 (lines 76-92)
 
         //RECURSION METHOD

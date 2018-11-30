@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /*
-Digibyte CommandLine Client
+doge CommandLine Client
 
 Developed at ThroughBit Technologies Pvt.Ltd
 HYFERx Project
@@ -17,12 +17,12 @@ let program = require('commander');
 //-o_o===init====================================================|
 program
  .version('0.1.0')
- .description('digibyte tx sign & broadcast.\n be careful!!\n this program is unsafe as it does not check inputs.');
+ .description('doge tx sign & broadcast.\n be careful!!\n this program is unsafe as it does not check inputs.');
 //-o_O===<o..o>=================================================~|
  program
  .command('sign <utxo_address> <to_address> <to_amount> <fee> <change> <privatekey>')
  .alias('s')
- .description('digibyte transaction signer.')
+ .description('doge transaction signer.')
  .action((utxo_address,to_address,to_amount,fee,change,privatekey)=>{
   utxo.build_tx_inputs(String(utxo_address))
   .then((inputs)=>{
@@ -47,7 +47,7 @@ program
 program
  .command('broadcast <hex>')
  .alias('b')
- .description('broadcast digibyte transaction')
+ .description('broadcast doge transaction')
  .action((hex)=>{
   broadcast.broadcast_to_node(hex)
   .then((txid)=>{

@@ -12,7 +12,7 @@ const res_fmt = require('./lib/response_format');
 const express = require('express');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
-const digibyte = require('digibyte');
+const doge = require('dogecore-lib');
 //-o_o===setup=====================================================|
 const app = express();
 const PORT=process.env.MSPORT;
@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.get("/", (req,res)=>{
   console.log(`Received transaction to sign: ${req.body})}`);
 
-  let multiSigTx = new digibyte.Transaction(req.body).sign(process.env.MSPK2);
+  let multiSigTx = new doge.Transaction(req.body).sign(process.env.MSPK2);
 
   //assert(multiSigTx.isFullySigned());
   //console.log(`SignedTx at Signatory: ${JSON.stringify(multiSigTx.isFullySigned())}`);

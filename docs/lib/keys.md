@@ -2,7 +2,7 @@
 
 ## Overview
 
-keys.js is used to generate a digibyte key-pair and address set.
+keys.js is used to generate a dogecoin key-pair and address set.
 
 The generate function takes two parameters:
 

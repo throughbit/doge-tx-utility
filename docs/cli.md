@@ -2,7 +2,7 @@
 
 ## Overview
 
-command-line utility for digibyte transactions.
+command-line utility for dogecoin transactions.
 
 ## Usage
 
