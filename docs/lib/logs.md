@@ -1,6 +1,6 @@
 # logs.js
 
-**Overview**
+## Overview
 
 logs.js is used to log all transactions that have been signed by the utility.
 
@@ -8,34 +8,31 @@ Log format is defined by:
 
 Success Format:
 
-const s_log={
-  "time":time,
-  "status": "success",
-  "message": `Transactions have been signed.`,
-  "transaction_outputs": data.outputs,
-  "transaction_inputs": data.inputs,
-  "hex":data.hex
-}
+        const s_log={
+          "time":time,
+          "status": "success",
+          "message": `Transactions have been signed.`,
+          "transaction_outputs": data.outputs,
+          "transaction_inputs": data.inputs,
+          "hex":data.hex
+        }
 
-Failure Format: 
+Failure Format:
 
-const f_log={
-    "time":time,
-    "status": "fail",
-    "message":`Error signing transactions.`,
-    "transaction_outputs": data.outputs,
-    "transaction_inputs": data.inputs
-}
-  
-**Usage**
+        const f_log={
+            "time":time,
+            "status": "fail",
+            "message":`Error signing transactions.`,
+            "transaction_outputs": data.outputs,
+            "transaction_inputs": data.inputs
+        }
 
-const logs = require('logs.js');
+## Usage
+
+        const logs = require('logs.js');
 
 To log success:
-logs.write_sign(true,data);
+        logs.write_sign(true,data);
 
 To log failure:
-logs.write_sign(false,data);
-
-
-
+        logs.write_sign(false,data);

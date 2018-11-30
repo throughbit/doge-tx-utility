@@ -1,29 +1,21 @@
 # handle_errors.js
 
-**Dependencies**
+## Overview
 
-1*../lib/response_format.js
+handle_errors.js is used to organize error handling by listing out all possible error cases in one location.
 
-**Overview**
+## Usage
 
-handle_errors.js is used to organize error handling and list out all possible error cases in one location.
+          const errors = require('handle_errors.js');
+          ...
+          .then((result)=>{
+            ...
+          })
+          .catch((e)=>{
+                res.send(errors.handle(e));
+          });
 
-Returns a response in accordance to 1* with 
-{ status:false, message:<error_details> }
+let bounty = 10;
+let incentive = bounty DGB + mad props for finding missing cases;
 
-**Usage**
-
-const errors = require('handle_errors.js');
-
-..}
-  .catch((e)=>{
-        res.send(errors.handle(e));
-  });
-
-
-
-
-
-
-
-
+bounty = calculate_current_bounty_rate(financial_status.at(new Date.now());

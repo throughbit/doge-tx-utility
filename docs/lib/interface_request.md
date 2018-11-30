@@ -1,24 +1,15 @@
 # interface_request.js
 
-**Overview**
+## Overview
 interface_request.js is a template for requests made to the node-interface.
 
-It takes two parameters: options and ep_name
+It takes two parameters:
 
-options is built in the ../lib/options.js
-ep_name is used for clarity in error logging.
+* **options** : built in *req_options*
+* **ep_name** is used for clarity in error logging
 
-**Usage**
+## Usage
 
-const node_interface = require('interface_request.js');
-
-node_interface.req("interface",{},"POST",/new_address);
-
-
-
-
-
-
-
-
-
+        const node_interface = require('interface_request.js');
+        ...
+        node_interface.req("interface",{},"POST",/new_address);

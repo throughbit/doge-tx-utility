@@ -1,11 +1,9 @@
 # cli.js
 
-**Overview**
+## Overview
 
 command-line utility for digibyte transactions.
 
-**Usage**
+## Usage
 
-node cli.js -h 
-
-
+node cli.js -h
