@@ -1,4 +1,4 @@
-# doge_tx_utily
+# doge_tx_utility
 
 **Test Version**
 
